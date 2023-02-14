@@ -10,13 +10,11 @@ async function fetchId(name) {
 			{ mode: "cors" }
 		);
 		const data = await response.json();
-		console.log(data);
 		let ids = {};
 		let result = data.results;
 		if (result.length) {
 			if (result.length > 4) {
 				for (let i = 0; i < 5; i++) {
-					console.log(result[i].id);
 					ids[result[i].id] = result[i].media_type;
 				}
 			} else {
