@@ -10,8 +10,6 @@ export default function addSubmitSearchFunction() {
 		event.preventDefault();
 		const movieInfo = await (applySearchResult());
         const selectedMovieInfo = await collectSearchResult(movieInfo);
-        console.log(movieInfo);
-        console.log(selectedMovieInfo);
         formatSearchResult(selectedMovieInfo, "500");
 	});
 }
