@@ -8,12 +8,17 @@ import * as movie from "./js/apiFunctions/fetchMovieInfo";
 console.log("Hello World");
 fetchId('IRON MAN');
 
-fetchDummy();
+fetchMovieDummy(1726);
+// fetchMovieDummy(3097); // fail to fetch because its tv.
+fetchMovieDummy(10138);
+fetchMovieDummy(68721);
 
-async function fetchDummy() {
-    const movieDetails = await movie.fetchMovieDetails(1726);
+async function fetchMovieDummy(id) {
+    const movieDetails = await movie.fetchMovieDetails(id);
+    const movieReccos = await movie.fetchMovieReccos(id);
+    const movieProviders = await movie.fetchMovieProviders(id);
     console.log(movieDetails);
-    const movieReccos = await movie.fetchReccos(1726);
     console.log(movieReccos);
+    console.log(movieProviders);
 }
 addSubmitSearchFunction();
