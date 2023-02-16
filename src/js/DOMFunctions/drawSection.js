@@ -32,16 +32,16 @@ const drawSection = async (id, media) => {
 
 	// Draw (if any) title, photo, tagline, and summary.
 	const drawIntro = (imgSize) => {
-		const container = document.createElement("div");
-		container.classList.add("intro");
+		const introContainer = document.createElement("div");
+		introContainer.classList.add("intro");
 
-		container.appendChild(createTitle());
-		details.tagline ? container.appendChild(writeTagline()) : "";
+		introContainer.appendChild(createTitle());
+		details.tagline ? introContainer.appendChild(writeTagline()) : "";
 
 		const img = renderImg(imgSize);
-		img ? container.appendChild(img) : "";
+		img ? introContainer.appendChild(img) : "";
 
-		container.appendChild(writeSummary());
+		introContainer.appendChild(writeSummary());
 
 		function createTitle() {
 			const title = document.createElement("h1");
@@ -83,6 +83,55 @@ const drawSection = async (id, media) => {
 			para.classList.add("summary");
 			return para;
 		}
+		return introContainer;
+	};
+
+	const drawSubInfos = () => {
+		let subInfos = {
+			genres: details.genres,
+			runtime: details.runtime,
+			vote_average: details.vote_average,
+			vote_count: details.vote_count,
+			popularity: details.popularity,
+		};
+
+		const container = document.createElement("div");
+		container.classList.add("subinfo-container");
+
+		const information = [
+			createSubInfo("Genres:", details.genres.join(', ')),
+			createSubInfo("Runtime:", convertMinToHr(details.runtime)),
+			createSubInfo("Vote Average:", details.vote_average),
+			createSubInfo("Vote Count:", details.vote_count),
+			createSubInfo("Popularity:", details.popularity),
+		];
+
+		information.forEach(info => container.appendChild(info));
+
+		function createSubInfo(category, info) {
+			const subInfo = document.createElement("div");
+			const categoryName = document.createElement("span");
+			const categoryInfo = document.createElement("span");
+
+			subInfo.classList.add("sub-info");
+			categoryName.classList.add("category-name");
+			categoryInfo.classList.add("category-info");
+
+			categoryName.textContent = category;
+			categoryInfo.textContent = info;
+
+			[categoryName, categoryInfo].forEach((info) => subInfo.appendChild(info));
+			return subInfo;
+		}
+
+		function convertMinToHr(mins) {
+			const hours = mins / 60;
+			const rHours = Math.floor(hours);
+			const minutes = (hours - rHours) * 60;
+			const rMinutes = Math.round(minutes);
+			return `${rHours}h ${rMinutes}min`;
+		}
+
 		return container;
 	};
 
@@ -91,6 +140,7 @@ const drawSection = async (id, media) => {
 		addToSection,
 		drawAll,
 		drawIntro,
+		drawSubInfos,
 	};
 };
 

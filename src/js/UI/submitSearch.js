@@ -5,8 +5,7 @@ export default async function addSubmitSearchFnc() {
 	searchBtn.addEventListener("click", async (e) => {
 		e.preventDefault();
 		const query = interpretToQuery(document.getElementById('input-search').value);
-		console.log(query);
-		if(!query) {alert('Please enter a movie/tv show'); return;}
+		if(!query) {alert('Please enter a valid movie/tv show'); return;}
 		clearSections();
 		await drawSections(query);
 		
