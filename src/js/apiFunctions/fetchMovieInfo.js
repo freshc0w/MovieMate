@@ -54,7 +54,8 @@ async function fetchMovieReccos(movie_id) {
 					poster_path: movie.poster_path,
 					backdrop_path: movie.backdrop_path,
 				};
-				if (count === 5) { // Max 5 movies to be recommended
+				if (count === 5) {
+					// Max 5 movies to be recommended
 					break;
 				}
 				count++;
@@ -129,8 +130,48 @@ async function fetchMovieProviders(movie_id) {
 	}
 }
 
+// Find movie trailer and return false if none can be found.
+// Official trailer will be prioritised.
+async function fetchMovieTrailer(movie_id) {
+	try {
+		let movieTrailer;
+		const response = await fetch(
+			`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=${API_KEY}`,
+			{ mode: "cors" }
+		);
+		const data = await response.json();
+
+		const trailers = data.results.filter((video) => video.type === "Trailer");
+
+		if (trailers.length === 0) return false;
+		// Find official trailer.
+		const official = trailers.filter((video) => {
+			video.official === true;
+		});
+
+		official.length !== 0
+			? (movieTrailer = official[0])
+			: (movieTrailer = trailers[0]);
+
+		return {
+			name: movieTrailer.name,
+			key: movieTrailer.key,
+			site: movieTrailer.site,
+			type: movieTrailer.type,
+			lang: movieTrailer.iso_639_1,
+		};
+	} catch (err) {
+		console.log(err);
+	}
+}
+
 function codeToCountryName(code) {
 	let regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 	return regionNames.of(code);
 }
-export { fetchMovieDetails, fetchMovieReccos, fetchMovieProviders };
+export {
+	fetchMovieDetails,
+	fetchMovieReccos,
+	fetchMovieProviders,
+	fetchMovieTrailer,
+};
