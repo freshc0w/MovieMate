@@ -1,4 +1,3 @@
-import { fetchId } from "./fetchId";
 
 const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
 
@@ -13,7 +12,7 @@ async function fetchMovieDetails(movie_id) {
 		const genres = data.genres.reduce((acc, val) => [...acc, val.name], []);
 
 		const generalInfo = {
-			name: data.original_title,
+			mName: data.original_title,
 			summary: data.overview,
 			tagline: data.tagline,
 			popularity: data.popularity,
@@ -49,7 +48,7 @@ async function fetchMovieReccos(movie_id) {
 			let count = 1;
 			for (let movie of data.results) {
 				recMovies[movie.original_title] = {
-					name: movie.original_title,
+					mName: movie.original_title,
 					id: movie.id,
 					poster_path: movie.poster_path,
 					backdrop_path: movie.backdrop_path,
@@ -154,7 +153,7 @@ async function fetchMovieTrailer(movie_id) {
 			: (movieTrailer = trailers[0]);
 
 		return {
-			name: movieTrailer.name,
+			mName: movieTrailer.name,
 			key: movieTrailer.key,
 			site: movieTrailer.site,
 			type: movieTrailer.type,
