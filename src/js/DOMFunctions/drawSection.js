@@ -87,14 +87,6 @@ const drawSection = async (id, media) => {
 	};
 
 	const drawSubInfos = () => {
-		let subInfos = {
-			genres: details.genres,
-			runtime: details.runtime,
-			vote_average: details.vote_average,
-			vote_count: details.vote_count,
-			popularity: details.popularity,
-		};
-
 		const container = document.createElement("div");
 		container.classList.add("subinfo-container");
 
