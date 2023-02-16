@@ -81,7 +81,7 @@ async function fetchMovieProviders(movie_id) {
 		const data = await response.json();
 
 		for (const countryCode in data.results) {
-			const country = codeToCountryName(countryCode);
+			const country = getCountryName(countryCode);
 			providersByCountry[country] = {
 				stream: [],
 				rent: [],
@@ -158,20 +158,57 @@ async function fetchMovieTrailer(movie_id) {
 			key: movieTrailer.key,
 			site: movieTrailer.site,
 			type: movieTrailer.type,
-			lang: movieTrailer.iso_639_1,
+			lang: getLanguage(movieTrailer.iso_639_1),
 		};
 	} catch (err) {
-		console.log(err);
+		alert(err);
 	}
 }
 
-function codeToCountryName(code) {
+// Returns an arr of a maximum of 5 reviews based on the movie from random sources.
+// If no reviews are found, this fnc returns false.
+async function fetchMovieReviews(movie_id) {
+	try {
+		let reviews = [];
+		const response = await fetch(
+			`https://api.themoviedb.org/3/movie/${movie_id}/reviews?api_key=${API_KEY}&language=en-US&page=1`,
+			{ mode: "cors" }
+		);
+		const data = await response.json();
+		console.log(data);
+		if (data.results.length === 0) return false;
+
+		let count = 1;
+		data.results.forEach((review) => {
+			reviews.push({
+				author: review.author,
+				rating: review.author_details.rating,
+				pic_path: review.author_details.avatar_path,
+				content: review.content,
+				url: review.url,
+				last_updated: review.updated_at,
+			});
+			count++;
+		});
+		return reviews.slice(0, 5);;
+	} catch (err) {
+		alert(err);
+	}
+}
+
+function getCountryName(code) {
 	let regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 	return regionNames.of(code);
+}
+
+function getLanguage(code) {
+	const lang = new Intl.DisplayNames(["en"], { type: "language" });
+	return lang.of(code);
 }
 export {
 	fetchMovieDetails,
 	fetchMovieReccos,
 	fetchMovieProviders,
 	fetchMovieTrailer,
+	fetchMovieReviews,
 };

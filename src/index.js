@@ -18,9 +18,11 @@ async function fetchMovieDummy(id) {
     const movieReccos = await movie.fetchMovieReccos(id);
     const movieProviders = await movie.fetchMovieProviders(id);
     const movieTrailer = await movie.fetchMovieTrailer(id);
+    const movieReviews = await movie.fetchMovieReviews(id);
     console.log(movieDetails);
     console.log(movieReccos);
     console.log(movieProviders);
     console.log(movieTrailer);
+    console.log(movieReviews);
 }
 addSubmitSearchFunction();
