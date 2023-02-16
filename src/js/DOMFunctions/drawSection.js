@@ -12,7 +12,11 @@ This section will consts of the overall movie/tv's
 
 const drawSection = async (id, media) => {
 	const section = document.createElement("section");
-	const details = await getDetails(id);
+	const details = await getInfo(id, movie.fetchMovieDetails, "");
+	const recs = await getInfo(id, movie.fetchMovieReccos, "");
+	const providers = await getInfo(id, movie.fetchMovieProviders, "");
+	const trailer = await getInfo(id, movie.fetchMovieTrailer, "");
+	const reviews = await getInfo(id, movie.fetchMovieReviews, "");
 
 	function drawAll() {
 		addToSection(drawIntro());
@@ -22,8 +26,8 @@ const drawSection = async (id, media) => {
 		section.appendChild(part);
 	}
 
-	async function getDetails(id) {
-		return media === "movie" ? await movie.fetchMovieDetails(id) : "";
+	async function getInfo(id, movieFnc, tvFnc) {
+		return media === "movie" ? await movieFnc(id) : "";
 	}
 
 	// Draw (if any) title, photo, tagline, and summary.
