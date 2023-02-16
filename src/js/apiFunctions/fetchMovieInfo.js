@@ -1,4 +1,3 @@
-
 const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
 
 async function fetchMovieDetails(movie_id) {
@@ -189,7 +188,7 @@ async function fetchMovieReviews(movie_id) {
 			});
 			count++;
 		});
-		return reviews.slice(0, 5);;
+		return reviews.slice(0, 5);
 	} catch (err) {
 		alert(err);
 	}

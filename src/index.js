@@ -1,7 +1,5 @@
-import {drawSections} from "./js/DOMFunctions/drawSections";
-import addSubmitSearchFnc from "./js/UI/submitSearch"
-
-
+import { drawSections } from "./js/DOMFunctions/drawSections";
+import addSubmitSearchFnc from "./js/UI/submitSearch";
 
 console.log("Hello World");
 // fetchIds('IRON MAN');

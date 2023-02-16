@@ -91,14 +91,14 @@ const drawSection = async (id, media) => {
 		container.classList.add("subinfo-container");
 
 		const information = [
-			createSubInfo("Genres:", details.genres.join(', ')),
+			createSubInfo("Genres:", details.genres.join(", ")),
 			createSubInfo("Runtime:", convertMinToHr(details.runtime)),
 			createSubInfo("Vote Average:", details.vote_average),
 			createSubInfo("Vote Count:", details.vote_count),
 			createSubInfo("Popularity:", details.popularity),
 		];
 
-		information.forEach(info => container.appendChild(info));
+		information.forEach((info) => container.appendChild(info));
 
 		function createSubInfo(category, info) {
 			const subInfo = document.createElement("div");
