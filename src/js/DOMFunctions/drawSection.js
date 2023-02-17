@@ -1,4 +1,5 @@
 import * as movie from "../apiFunctions/fetchMovieInfo";
+import addSelectCountryFnc from "../UI/selectCountries";
 
 /*
 Draw an individual section based on user input query.
@@ -15,6 +16,7 @@ const drawSection = async (id, media) => {
 	const details = await getInfo(id, movie.fetchMovieDetails, "");
 	const recs = await getInfo(id, movie.fetchMovieReccos, "");
 	const providers = await getInfo(id, movie.fetchMovieProviders, "");
+	console.log(providers);
 	const trailer = await getInfo(id, movie.fetchMovieTrailer, "");
 	const reviews = await getInfo(id, movie.fetchMovieReviews, "");
 
@@ -24,6 +26,12 @@ const drawSection = async (id, media) => {
 
 	function addToSection(part) {
 		section.appendChild(part);
+	}
+
+	function renderElement(tag, className) {
+		const container = document.createElement(tag);
+		container.classList.add(className);
+		return container;
 	}
 
 	async function getInfo(id, movieFnc, tvFnc) {
@@ -129,11 +137,6 @@ const drawSection = async (id, media) => {
 
 	const drawProviders = () => {
 		// Houses the btn that opens the modal and overlay, and the available providers for 'streaming', 'rent' and 'purchase'.
-		function renderElement(tag, className) {
-			const container = document.createElement(tag);
-			container.classList.add(className);
-			return container;
-		}
 		const providerContainer = renderElement("div", "provider-container");
 		const countryBtn = renderElement("button", "country-btn");
 		const houseContainer = renderElement("div", "house-provider-container");
@@ -143,14 +146,16 @@ const drawSection = async (id, media) => {
 
 		// Search for default country "Australia". If none found. Draw the first country's provider.
 		if (Object.keys(providers).length) {
-			Object.keys(providers).includes("Australia")
-				? drawProvider("Australia")
-				: drawProvider(Object.keys(providers)[0]);
+			if (Object.keys(providers).includes("Australia")) {
+				drawProvider("Australia");
+				addSelectCountryFnc(countryBtn, renderCountriesModal("Australia"));
+			} else {
+				drawProvider(Object.keys(providers)[0]);
+			}
 		} else {
 			countryBtn.textContent =
 				"No countries offer this tv/movie at the moment.";
 		}
-
 		return providerContainer;
 
 		function drawProvider(countryName = "Australia") {
@@ -203,7 +208,34 @@ const drawSection = async (id, media) => {
 				houseContainer.appendChild(serviceContainer);
 			});
 		}
+
 	};
+
+	function renderCountriesModal(countryName) {
+		const providerCountries = Object.keys(providers);
+		const modalContainer = renderElement("div", "modal-country-container");
+		const modalHeader = renderElement("div", "modal-header");
+		const modalBody = renderElement("div", "modal-body");
+		const modalCurrentCountry = renderElement("div", "modal-current-country");
+		const modalInputSearch = renderElement("input", "modal-input-search");
+		const modalListCountries = renderElement("div", "modal-list-countries");
+
+		// Heading that displays current country selected.
+		const heading = document.createElement("h2");
+		heading.textContent = "Countries";
+		modalHeader.appendChild(heading);
+
+		const currentCountry = document.createElement("h3");
+		currentCountry.textContent = countryName;
+		modalCurrentCountry.appendChild(currentCountry);
+
+		[modalHeader, modalBody, modalCurrentCountry, modalInputSearch, modalListCountries].forEach(modalElem => modalContainer.appendChild(modalElem));
+
+		const bodyDocument = document.querySelector('body');
+		bodyDocument.append(modalContainer);
+		document.querySelector('.face-mask').style.display = "block";
+		
+	}
 	return {
 		section,
 		addToSection,
