@@ -127,12 +127,70 @@ const drawSection = async (id, media) => {
 		return container;
 	};
 
+	const drawProviders = () => {
+		// Houses the btn that opens the modal and overlay, and the available providers for 'streaming', 'rent' and 'purchase'.
+		function renderElement(tag, className) {
+			const container = document.createElement(tag);
+			container.classList.add(className);
+			return container;
+		}
+		const providerContainer = renderElement("div", "provider-container");
+		const countryBtn = renderElement("button", "country-btn");
+		const houseContainer = renderElement("div", "house-provider-container");
+		[countryBtn, houseContainer].forEach((elem) => {
+			providerContainer.appendChild(elem);
+		});
+		drawProvider(); // Default country "Australia"
+		return providerContainer;
+
+		function drawProvider(countryName = "Australia") {
+			// Change text of btn to countryName
+			countryBtn.textContent = countryName;
+
+			const streamInfo = providers[countryName].stream;
+			const buyInfo = providers[countryName].buy;
+			const rentInfo = providers[countryName].rent;
+
+			[streamInfo, buyInfo, rentInfo].forEach((info) => {
+				const serviceContainer = renderElement("div", "service-container");
+				const serviceName = renderElement("div", "service-name");
+				const providerServiceContainer = renderElement(
+					"div",
+					"provider-service-container"
+				);
+
+				info.forEach((provider) => {
+					const providerService = renderElement("div", "provider-service");
+					// Add img and name of provider.
+					const providerImg = renderElement("img", "provider-img");
+					const providerName = renderElement("span", "provider-name");
+
+					if (provider.provider_logo_path) {
+						providerImg.src = `https://image.tmdb.org/t/p/original/${provider.provider_logo_path}`;
+						providerImg.alt = `${provider.provider_name} picture.`;
+						providerName.textContent = provider.provider_name;
+					}
+
+					[providerImg, providerName].forEach((elem) => {
+						providerService.appendChild(elem);
+					});
+					providerServiceContainer.appendChild(providerService);
+				});
+				
+				serviceName.textContent = `${info}`;
+				serviceContainer.appendChild(serviceName);
+				serviceContainer.appendChild(providerServiceContainer);
+				houseContainer.appendChild(serviceContainer);
+			});
+		}
+	};
 	return {
 		section,
 		addToSection,
 		drawAll,
 		drawIntro,
 		drawSubInfos,
+		drawProviders,
 	};
 };
 

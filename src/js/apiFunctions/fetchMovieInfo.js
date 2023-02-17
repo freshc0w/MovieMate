@@ -122,6 +122,7 @@ async function fetchMovieProviders(movie_id) {
 				providersByCountry[country].buy
 			);
 		}
+		console.log(providersByCountry)
 		return providersByCountry;
 	} catch (err) {
 		alert(err);
@@ -209,4 +210,5 @@ export {
 	fetchMovieProviders,
 	fetchMovieTrailer,
 	fetchMovieReviews,
+	getCountryName,
 };

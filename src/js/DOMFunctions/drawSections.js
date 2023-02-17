@@ -23,6 +23,7 @@ async function drawSections(title) {
 		const section = await drawSection(id, media);
 		section.addToSection(section.drawIntro("300"));
 		section.addToSection(section.drawSubInfos());
+		section.addToSection(section.drawProviders());
 		main.appendChild(section.section);
 		return renderSection;
 	}
