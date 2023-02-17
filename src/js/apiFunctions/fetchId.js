@@ -11,18 +11,24 @@ async function fetchIds(name) {
 		);
 		const data = await response.json();
 		let ids = {};
-		let result = data.results;
+		// let result = data.results;
+		let result = data.results.sort(
+			(p1, p2) => (p1.popularity < p2.popularity) ? 1 : (p1.popularity > p2.popularity) ? -1 : 0
+		) // Sort by popularity.
+		
 		if (result.length) {
-			if (result.length > 4) {
-				for (let i = 0; i < 5; i++) {
-					ids[result[i].id] = result[i].media_type;
-				}
-			} else {
-				for (let i = 0; i < result.length; i++) {
-					ids[result[i].id] = result[i].media_type;
-				}
+			// if (result.length > 4) {
+			// 	for (let i = 0; i < 5; i++) {
+			// 		ids[result[i].id] = result[i].media_type;
+			// 	}
+			// } else {
+			// 	for (let i = 0; i < result.length; i++) {
+			// 		ids[result[i].id] = result[i].media_type;
+			// 	}
+			// }
+			for(let i = 0; i < result.length; i++) {
+				ids[result[i].id] = result[i].media_type;
 			}
-			console.log(ids);
 			return ids;
 		} else {
 			alert(`No results found for ${name}`);

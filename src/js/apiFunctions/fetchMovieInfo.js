@@ -122,7 +122,6 @@ async function fetchMovieProviders(movie_id) {
 				providersByCountry[country].buy
 			);
 		}
-		console.log(providersByCountry)
 		return providersByCountry;
 	} catch (err) {
 		alert(err);
@@ -174,7 +173,6 @@ async function fetchMovieReviews(movie_id) {
 			{ mode: "cors" }
 		);
 		const data = await response.json();
-		console.log(data);
 		if (data.results.length === 0) return false;
 
 		let count = 1;

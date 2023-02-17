@@ -142,25 +142,24 @@ const drawSection = async (id, media) => {
 		});
 
 		// Search for default country "Australia". If none found. Draw the first country's provider.
-		if(Object.keys(providers).length){
-		Object.keys(providers).includes("Australia") ? drawProvider : drawProvider(Object.keys(providers)[0]);} else {
-			countryBtn.textContent = 'No countries offer this tv/movie at the moment.'
+		if (Object.keys(providers).length) {
+			Object.keys(providers).includes("Australia")
+				? drawProvider("Australia")
+				: drawProvider(Object.keys(providers)[0]);
+		} else {
+			countryBtn.textContent =
+				"No countries offer this tv/movie at the moment.";
 		}
 
 		return providerContainer;
 
 		function drawProvider(countryName = "Australia") {
 			// Change text of btn to countryName
-			console.log(countryName);
 			countryBtn.textContent = countryName;
 
-			console.log(providers);
-			
 			const streamInfo = providers[countryName].stream;
-			console.log(streamInfo)
 			const buyInfo = providers[countryName].buy;
 			const rentInfo = providers[countryName].rent;
-
 
 			const serviceNames = ["Stream at:", "Purchase at:", "Rent at:"];
 			// To assign names for each sevice providers.
@@ -168,7 +167,6 @@ const drawSection = async (id, media) => {
 			let idx = 0;
 
 			[streamInfo, buyInfo, rentInfo].forEach((info) => {
-				
 				const serviceContainer = renderElement("div", "service-container");
 				const serviceName = renderElement("div", "service-name");
 				const providerServiceContainer = renderElement(
