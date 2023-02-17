@@ -169,6 +169,7 @@ const drawSection = async (id, media) => {
 			[streamInfo, buyInfo, rentInfo].forEach((info) => {
 				const serviceContainer = renderElement("div", "service-container");
 				const serviceName = renderElement("div", "service-name");
+				const serviceNameBold = renderElement("h2", "service-name-bold");
 				const providerServiceContainer = renderElement(
 					"div",
 					"provider-service-container"
@@ -193,7 +194,8 @@ const drawSection = async (id, media) => {
 				});
 
 				if (info.length) {
-					serviceName.textContent = `${serviceNames[idx]}`;
+					serviceNameBold.textContent = `${serviceNames[idx]}`;
+					serviceName.appendChild(serviceNameBold);
 				}
 				idx++;
 				serviceContainer.appendChild(serviceName);
