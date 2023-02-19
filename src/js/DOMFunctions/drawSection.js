@@ -163,6 +163,7 @@ const drawSection = async (id, media) => {
 				"No countries offer this tv/movie at the moment.";
 		}
 
+		// availProviders ? renderCountriesModal(countryBtn.textContent) : ""; // temp
 		// Add btn event click listener to open modal
 		countryBtn.addEventListener("click", (e) => {
 			e.preventDefault();
@@ -225,25 +226,96 @@ const drawSection = async (id, media) => {
 		}
 	};
 
-	function renderCountriesModal(countryName) {
+	function renderCountriesModal(currCountryName) {
+		// Country names
 		const providerCountries = Object.keys(providers);
+		// Sort by country name and codes into an obj.
+		let countries = {};
+		let currCountryCode;
+		providerCountries.forEach((country) => {
+			countries[country] = providers[country].countryCode;
+
+			// Find current country code.
+			if (currCountryName === country) {
+				currCountryCode = providers[country].countryCode;
+			}
+		});
+
 		const modalContainer = renderElement("form", "modal-country-container");
 		const modalHeader = renderElement("div", "modal-header");
+
 		const modalBody = renderElement("div", "modal-body");
 		const modalCurrentCountry = renderElement("div", "modal-current-country");
 		const modalInputSearch = renderElement("input", "modal-input-search");
-		const modalListCountries = renderElement("div", "modal-list-countries");
+		const modalListCountries = renderElement("ul", "modal-list-countries");
+
 		const modalCloseBtn = renderElement("button", "modal-close-btn");
 
 		const renderHeading = () => {
 			// Heading that displays current country selected.
 			const heading = document.createElement("h2");
 			heading.textContent = "Countries";
-			modalHeader.appendChild(heading);
 
-			const currentCountry = document.createElement("h3");
-			currentCountry.textContent = countryName;
-			modalCurrentCountry.appendChild(currentCountry);
+			const currCountry = document.createElement("h3");
+			const searchLabel = document.createElement("label");
+			const searchSymb = renderElement("i", "fa");
+
+			const searchAttributes = {
+				id: "modal-input-search",
+				type: "text",
+				// onkeyup: "filter",
+				placeholder: "Search for countries...",
+				title: "Type in a country name"
+			}
+
+			for(let i in searchAttributes) {
+				modalInputSearch.setAttribute(i, searchAttributes[i]);
+			}
+			modalInputSearch.addEventListener("keyup", filterResults)
+
+			// Find current country name and code.
+			const currCountryFlag = renderCountryFlag(
+				currCountryCode,
+				currCountryName
+			);
+			currCountry.textContent = currCountryName;
+
+			modalCurrentCountry.appendChild(currCountryFlag);
+			modalCurrentCountry.appendChild(currCountry);
+
+			searchLabel.htmlFor = `${modalInputSearch.id}`;
+			searchSymb.classList.add("fa-search");
+			searchLabel.appendChild(searchSymb);
+
+			[heading, modalCurrentCountry, searchLabel, modalInputSearch].forEach(
+				(formElem) => {
+					modalHeader.appendChild(formElem);
+				}
+			);
+		};
+
+		const renderBody = () => {
+			modalListCountries.id = 'countries-list'
+			for(let country in countries) {
+				let countryCode = countries[country]
+
+				const countryContainer = renderElement('li', 'country-container');
+				const countryFlag = renderCountryFlag(countryCode, country);
+				const countryName = renderElement('a', 'country-name');
+
+				countryName.textContent = country;
+				countryName.setAttribute('href', '#');
+
+				[countryFlag, countryName].forEach(countryElem => {
+					countryContainer.appendChild(countryElem);
+				})
+				modalListCountries.appendChild(countryContainer);
+			}
+
+
+			[modalListCountries].forEach((formElem) => {
+				modalBody.appendChild(formElem);
+			});
 		};
 
 		const renderCloseBtn = (closeFnc) => {
@@ -261,22 +333,43 @@ const drawSection = async (id, media) => {
 			});
 		};
 
+		// Render sections of the form.
 		renderHeading();
-
+		renderBody();
 		renderCloseBtn(addCloseFnc);
 
-		[
-			modalHeader,
-			modalBody,
-			modalCurrentCountry,
-			modalInputSearch,
-			modalListCountries,
-			modalCloseBtn,
-		].forEach((modalElem) => modalContainer.appendChild(modalElem));
+		[modalHeader, modalBody, modalCloseBtn].forEach((modalElem) =>
+			modalContainer.appendChild(modalElem)
+		);
 
 		const bodyDocument = document.querySelector("body");
 		bodyDocument.append(modalContainer);
 		document.querySelector(".face-mask").style.display = "block";
+
+		function renderCountryFlag(countryCode, countryName) {
+			const flag = renderElement("img", "country-flag");
+			flag.setAttribute("crossorigin", "anonymous");
+			flag.src = `https://countryflagsapi.com/png/${countryCode}`;
+			flag.alt = `${countryName} flag`;
+			return flag;
+		}
+
+		function filterResults() {
+			let input, filter, ul, li, a, i, txtValue;
+			input = document.getElementById('modal-input-search');
+			filter = input.value.toUpperCase();
+			ul = document.getElementById("countries-list");
+			li = ul.getElementsByTagName('li');
+			for(i = 0; i < li.length; i++) {
+				a = li[i].getElementsByTagName("a")[0];
+				txtValue = a.textContent || a.innerText;
+				if(txtValue.toUpperCase().indexOf(filter) > -1) {
+					li[i].style.display = "";
+				} else {
+					li[i].style.display = "none";
+				}
+			}
+		}
 	}
 	return {
 		section,

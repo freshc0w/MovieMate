@@ -84,6 +84,7 @@ async function fetchMovieProviders(movie_id) {
 				stream: [],
 				rent: [],
 				buy: [],
+				countryCode: countryCode,
 			};
 
 			/*

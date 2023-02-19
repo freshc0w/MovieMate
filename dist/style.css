@@ -1,83 +1,92 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-    position: relative;
+	position: relative;
 }
 
-.main-container, form {
-    padding: 10px;
+.main-container,
+form {
+	padding: 10px;
 }
 
 .face-mask {
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+	display: none;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 
-    /* height: 100%; */
-    width: 100vw;
-    width: 100svw;
-    
-    background-color: rgba(0, 0, 0, 0.45);
+	/* height: 100%; */
+	width: 100vw;
+	width: 100svw;
+
+	background-color: rgba(0, 0, 0, 0.45);
 }
-
 
 /*
 sub-info styling
 */
 
-
-
 /*
 Watch provider styling
 */
 .provider-service-container {
-    margin-bottom: 5px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    place-items: center;
-    gap: max(2vw, 0.5rem);
+	margin-bottom: 5px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+	place-items: center;
+	gap: max(2vw, 0.5rem);
 }
 .provider-img {
-    width: 35px;
+	width: 35px;
 }
 .provider-name {
-    text-align: center;
+	text-align: center;
 }
 
 .provider-service {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.25rem;
 }
 
 /*
 Countries modal styling.
 */
 .modal-country-container {
-    --width: min(600px, 80vw);
-    --height: 80vh;
-    position: fixed;
-    width: var(--width);
-    height: var(--height);
-    top: 50%;
-    left: 50%;
-    margin-top: calc(var(--height) * -1/2);
-    margin-left: calc(var(--width) * -1/2);
-    border: 2px solid red;
-    background-color: #fff;
+	--width: min(600px, 80vw);
+	--height: 80vh;
+	position: fixed;
+	width: var(--width);
+	height: var(--height);
+	top: 50%;
+	left: 50%;
+	margin-top: calc(var(--height) * -1 / 2);
+	margin-left: calc(var(--width) * -1 / 2);
+	border: 2px solid red;
+	background-color: #fff;
 }
 .modal-close-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    border-radius: 1rem;
-    padding: 0.25rem 0.35rem;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	border-radius: 1rem;
+	padding: 0.25rem 0.35rem;
+}
+.modal-current-country {
+	display: flex;
+	gap: 0.5rem;
+}
+.country-flag {
+	width: 10%;
+	object-fit: contain;
+}
+.modal-list-countries {
+    transition: all 0.5s ease;
 }
