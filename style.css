@@ -1,3 +1,7 @@
+:root {
+    --default-background-color: #0a1625;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -10,11 +14,21 @@ html {
 
 body {
 	position: relative;
+    overflow-x: hidden;
 }
 
 .main-container,
 form {
 	padding: 10px;
+}
+button {
+    cursor: pointer;
+}
+ul {
+    list-style: none;
+}
+a {
+    text-decoration: none;
 }
 
 .face-mask {
@@ -74,8 +88,20 @@ Countries modal styling.
 	margin-top: calc(var(--height) * -1 / 2);
 	margin-left: calc(var(--width) * -1 / 2);
 	border: 2px solid red;
-	background-color: #fff;
+	background-color: var(--default-background-color);
+    color: whitesmoke;
     overflow: scroll;
+    overflow-x: hidden;
+    border-radius: 1rem;
+    border: 1px solid whitesmoke;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+.modal-header {
+    text-align: center;
+    position: sticky;
+}
+.modal-header > * {
+    margin: 0.5rem 0; 
 }
 .modal-close-btn {
 	position: absolute;
@@ -87,11 +113,80 @@ Countries modal styling.
 .modal-current-country {
 	display: flex;
 	gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1.25rem, 3vw, 2.25rem)
+}
+
+#modal-input-search {
+    width: 85%;
+    outline-color: transparent;
+    border: none;
+    padding: 0.35rem 0.5rem;
+    background-color: var(--default-background-color);
+    opacity: 0.75;
+    color: white;
+    box-shadow: 0 0 4px white, 0 0 8px whitesmoke;
+    border-radius: 1rem;
+    font-size: clamp(0.8rem, 4vw, 1.3rem);
+}
+.modal-header > h2 {
+    font-size: clamp(1.75rem, 7vw, 2.75rem);
+}
+
+.modal-body {
+    padding: 0.75rem;
+}
+#countries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+.country-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.45rem;
+    padding: 0.5rem;
+    height: 50px;
+    border-radius: 0.75rem;
+}
+.country-container:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+}
+
+.modal-list-countries {
+    transition: all 0.5s ease;
+}
+.country-container > a {
+    color: white;
 }
 .country-flag {
 	width: 10%;
 	object-fit: contain;
 }
-.modal-list-countries {
-    transition: all 0.5s ease;
+.fa-check {
+    margin-left: auto;
+    margin-right: 2.5%;
 }
+
+
+/* scrollbar styling */
+*::-webkit-scrollbar {
+    width: 8px;
+    margin-top: 5px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background-color: rgba(0, 21, 41, 0.8);
+    /* border-radius: 3em; */
+	box-shadow: 0 0 4px white;
+    
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    border: 1px solid #ffffff;
+  }
