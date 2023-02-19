@@ -1,5 +1,4 @@
 import * as movie from "../apiFunctions/fetchMovieInfo";
-import addSelectCountryFnc from "../UI/selectCountries";
 
 /*
 Draw an individual section based on user input query.
@@ -136,6 +135,9 @@ const drawSection = async (id, media) => {
 	};
 
 	const drawProviders = () => {
+		let availProviders; // Boolean that indicates if there are any watch
+		// providers for this show.
+
 		// Houses the btn that opens the modal and overlay, and the available providers for 'streaming', 'rent' and 'purchase'.
 		const providerContainer = renderElement("div", "provider-container");
 		const countryBtn = renderElement("button", "country-btn");
@@ -146,16 +148,29 @@ const drawSection = async (id, media) => {
 
 		// Search for default country "Australia". If none found. Draw the first country's provider.
 		if (Object.keys(providers).length) {
+			availProviders = true;
 			if (Object.keys(providers).includes("Australia")) {
 				drawProvider("Australia");
-				addSelectCountryFnc(countryBtn, renderCountriesModal("Australia"));
+				countryBtn.textContent = "Australia";
 			} else {
-				drawProvider(Object.keys(providers)[0]);
+				const firstProvider = Object.keys(providers)[0];
+				drawProvider(firstProvider);
+				countryBtn.textContent = `${firstProvider}`;
 			}
 		} else {
+			availProviders = false;
 			countryBtn.textContent =
 				"No countries offer this tv/movie at the moment.";
 		}
+
+		// Add btn event click listener to open modal
+		countryBtn.addEventListener("click", (e) => {
+			e.preventDefault();
+			if (availProviders) {
+				renderCountriesModal(countryBtn.textContent);
+			}
+		});
+
 		return providerContainer;
 
 		function drawProvider(countryName = "Australia") {
@@ -208,33 +223,60 @@ const drawSection = async (id, media) => {
 				houseContainer.appendChild(serviceContainer);
 			});
 		}
-
 	};
 
 	function renderCountriesModal(countryName) {
 		const providerCountries = Object.keys(providers);
-		const modalContainer = renderElement("div", "modal-country-container");
+		const modalContainer = renderElement("form", "modal-country-container");
 		const modalHeader = renderElement("div", "modal-header");
 		const modalBody = renderElement("div", "modal-body");
 		const modalCurrentCountry = renderElement("div", "modal-current-country");
 		const modalInputSearch = renderElement("input", "modal-input-search");
 		const modalListCountries = renderElement("div", "modal-list-countries");
+		const modalCloseBtn = renderElement("button", "modal-close-btn");
 
-		// Heading that displays current country selected.
-		const heading = document.createElement("h2");
-		heading.textContent = "Countries";
-		modalHeader.appendChild(heading);
+		const renderHeading = () => {
+			// Heading that displays current country selected.
+			const heading = document.createElement("h2");
+			heading.textContent = "Countries";
+			modalHeader.appendChild(heading);
 
-		const currentCountry = document.createElement("h3");
-		currentCountry.textContent = countryName;
-		modalCurrentCountry.appendChild(currentCountry);
+			const currentCountry = document.createElement("h3");
+			currentCountry.textContent = countryName;
+			modalCurrentCountry.appendChild(currentCountry);
+		};
 
-		[modalHeader, modalBody, modalCurrentCountry, modalInputSearch, modalListCountries].forEach(modalElem => modalContainer.appendChild(modalElem));
+		const renderCloseBtn = (closeFnc) => {
+			const closeSymb = renderElement("i", "fa");
+			closeSymb.classList.add("fa-close");
+			modalCloseBtn.appendChild(closeSymb);
+			closeFnc();
+		};
+		const addCloseFnc = () => {
+			modalCloseBtn.addEventListener("click", (e) => {
+				e.preventDefault();
+				const currentForm = document.querySelector(".modal-country-container");
+				currentForm.remove();
+				document.querySelector(".face-mask").style.display = "none";
+			});
+		};
 
-		const bodyDocument = document.querySelector('body');
+		renderHeading();
+
+		renderCloseBtn(addCloseFnc);
+
+		[
+			modalHeader,
+			modalBody,
+			modalCurrentCountry,
+			modalInputSearch,
+			modalListCountries,
+			modalCloseBtn,
+		].forEach((modalElem) => modalContainer.appendChild(modalElem));
+
+		const bodyDocument = document.querySelector("body");
 		bodyDocument.append(modalContainer);
-		document.querySelector('.face-mask').style.display = "block";
-		
+		document.querySelector(".face-mask").style.display = "block";
 	}
 	return {
 		section,

@@ -1,6 +1,6 @@
 const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
 /*
-Fetches the first 5 movie/show ids and return it in an array.
+Fetches the the first page of the movie/show ids and return it in an array.
 */
 async function fetchIds(name) {
 	const query = interpretToQuery(name);
