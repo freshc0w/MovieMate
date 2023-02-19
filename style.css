@@ -98,7 +98,6 @@ Countries modal styling.
 }
 .modal-header {
     text-align: center;
-    position: sticky;
 }
 .modal-header > * {
     margin: 0.5rem 0; 
@@ -189,4 +188,9 @@ Countries modal styling.
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     border: 1px solid #ffffff;
-  }
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+
+} 
