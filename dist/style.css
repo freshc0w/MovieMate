@@ -4,6 +4,10 @@
 	padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
 	position: relative;
 }
@@ -71,6 +75,7 @@ Countries modal styling.
 	margin-left: calc(var(--width) * -1 / 2);
 	border: 2px solid red;
 	background-color: #fff;
+    overflow: scroll;
 }
 .modal-close-btn {
 	position: absolute;

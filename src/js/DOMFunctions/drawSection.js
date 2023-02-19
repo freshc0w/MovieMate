@@ -74,6 +74,7 @@ const drawSection = async (id, media) => {
 				? (poster.src = `${baseImgUrl}/original/${img_path}`)
 				: (poster.src = `${baseImgUrl}/w${imgSize}/${img_path}`);
 			poster.alt = "Movie picture poster";
+			poster.setAttribute("loading", "lazy");
 			return poster;
 		}
 
@@ -169,8 +170,23 @@ const drawSection = async (id, media) => {
 			e.preventDefault();
 			if (availProviders) {
 				renderCountriesModal(countryBtn.textContent);
+				highlightCurrCountry(countryBtn.textContent);
+				// add country event here
+				applyChooseCountryFncs();
 			}
 		});
+		function applyChooseCountryFncs() {
+			const countries = document.querySelectorAll('.country-container');
+			countries.forEach(country => country.addEventListener("click", (e) => {
+				e.preventDefault();
+				const selectedCount = country.lastChild.textContent
+				console.log(selectedCount);
+				clearProvider();
+				drawProvider(selectedCount);
+				document.querySelector('.modal-country-container').remove();
+				document.querySelector('.face-mask').style.display = "none";
+			}))
+		}
 
 		return providerContainer;
 
@@ -205,6 +221,7 @@ const drawSection = async (id, media) => {
 					if (provider.provider_logo_path) {
 						providerImg.src = `https://image.tmdb.org/t/p/original/${provider.provider_logo_path}`;
 						providerImg.alt = `${provider.provider_name} picture.`;
+						providerImg.setAttribute("loading", "lazy");
 						providerName.textContent = provider.provider_name;
 					}
 
@@ -223,6 +240,9 @@ const drawSection = async (id, media) => {
 				serviceContainer.appendChild(providerServiceContainer);
 				houseContainer.appendChild(serviceContainer);
 			});
+		}
+		function clearProvider() {
+			houseContainer.innerHTML = "";
 		}
 	};
 
@@ -265,13 +285,13 @@ const drawSection = async (id, media) => {
 				type: "text",
 				// onkeyup: "filter",
 				placeholder: "Search for countries...",
-				title: "Type in a country name"
-			}
+				title: "Type in a country name",
+			};
 
-			for(let i in searchAttributes) {
+			for (let i in searchAttributes) {
 				modalInputSearch.setAttribute(i, searchAttributes[i]);
 			}
-			modalInputSearch.addEventListener("keyup", filterResults)
+			modalInputSearch.addEventListener("keyup", filterResults);
 
 			// Find current country name and code.
 			const currCountryFlag = renderCountryFlag(
@@ -295,23 +315,23 @@ const drawSection = async (id, media) => {
 		};
 
 		const renderBody = () => {
-			modalListCountries.id = 'countries-list'
-			for(let country in countries) {
-				let countryCode = countries[country]
+			modalListCountries.id = "countries-list";
+			for (let country in countries) {
+				let countryCode = countries[country];
 
-				const countryContainer = renderElement('li', 'country-container');
+				const countryContainer = renderElement("li", "country-container");
 				const countryFlag = renderCountryFlag(countryCode, country);
-				const countryName = renderElement('a', 'country-name');
+				const countryName = renderElement("a", "country-name");
 
 				countryName.textContent = country;
-				countryName.setAttribute('href', '#');
+				countryName.setAttribute("href", "#");
 
-				[countryFlag, countryName].forEach(countryElem => {
+				[countryFlag, countryName].forEach((countryElem) => {
 					countryContainer.appendChild(countryElem);
-				})
+				});
+
 				modalListCountries.appendChild(countryContainer);
 			}
-
 
 			[modalListCountries].forEach((formElem) => {
 				modalBody.appendChild(formElem);
@@ -356,18 +376,36 @@ const drawSection = async (id, media) => {
 
 		function filterResults() {
 			let input, filter, ul, li, a, i, txtValue;
-			input = document.getElementById('modal-input-search');
+			input = document.getElementById("modal-input-search");
 			filter = input.value.toUpperCase();
 			ul = document.getElementById("countries-list");
-			li = ul.getElementsByTagName('li');
-			for(i = 0; i < li.length; i++) {
+			li = ul.getElementsByTagName("li");
+
+			// Logic that filters the countries based on input.
+			for (i = 0; i < li.length; i++) {
 				a = li[i].getElementsByTagName("a")[0];
 				txtValue = a.textContent || a.innerText;
-				if(txtValue.toUpperCase().indexOf(filter) > -1) {
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
 					li[i].style.display = "";
 				} else {
 					li[i].style.display = "none";
 				}
+			}
+		}
+	}
+	function highlightCurrCountry(countryName) {
+		// Highlight selected country in the list of countries when
+		// modal is opened.
+
+		let ul, li, i, a, txtValue;
+		ul = document.getElementById("countries-list");
+		console.log(ul);
+		li = ul.getElementsByTagName("li");
+		for (i = 0; i < li.length; i++) {
+			a = li[i].getElementsByTagName("a")[0];
+			txtValue = a.textContent || a.innerText;
+			if (txtValue === countryName) {
+				li[i].style.backgroundColor = "rgba(50, 50, 50, 0.5)";
 			}
 		}
 	}
