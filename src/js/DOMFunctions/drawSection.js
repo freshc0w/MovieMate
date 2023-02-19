@@ -179,10 +179,11 @@ const drawSection = async (id, media) => {
 			const countries = document.querySelectorAll('.country-container');
 			countries.forEach(country => country.addEventListener("click", (e) => {
 				e.preventDefault();
-				const selectedCount = country.lastChild.textContent
-				console.log(selectedCount);
-				clearProvider();
-				drawProvider(selectedCount);
+				if(country.lastChild.textContent) {
+					const selectedCountry = country.lastChild.textContent;
+					clearProvider();
+					drawProvider(selectedCountry);
+				} 
 				document.querySelector('.modal-country-container').remove();
 				document.querySelector('.face-mask').style.display = "none";
 			}))
@@ -278,12 +279,10 @@ const drawSection = async (id, media) => {
 
 			const currCountry = document.createElement("h3");
 			const searchLabel = document.createElement("label");
-			const searchSymb = renderElement("i", "fa");
 
 			const searchAttributes = {
 				id: "modal-input-search",
 				type: "search",
-				// onkeyup: "filter",
 				placeholder: "🔍 Search for countries...",
 				title: "Type in a country name",
 				role: "search",
@@ -401,7 +400,6 @@ const drawSection = async (id, media) => {
 
 		let ul, li, i, a, txtValue;
 		ul = document.getElementById("countries-list");
-		console.log(ul);
 		li = ul.getElementsByTagName("li");
 		for (i = 0; i < li.length; i++) {
 			a = li[i].getElementsByTagName("a")[0];
