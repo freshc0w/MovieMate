@@ -282,16 +282,20 @@ const drawSection = async (id, media) => {
 
 			const searchAttributes = {
 				id: "modal-input-search",
-				type: "text",
+				type: "search",
 				// onkeyup: "filter",
-				placeholder: "Search for countries...",
+				placeholder: "🔍 Search for countries...",
 				title: "Type in a country name",
+				role: "search",
 			};
 
 			for (let i in searchAttributes) {
 				modalInputSearch.setAttribute(i, searchAttributes[i]);
 			}
 			modalInputSearch.addEventListener("keyup", filterResults);
+			modalInputSearch.addEventListener("submit", (e) => {
+				e.preventDefault();
+			})
 
 			// Find current country name and code.
 			const currCountryFlag = renderCountryFlag(
@@ -304,8 +308,6 @@ const drawSection = async (id, media) => {
 			modalCurrentCountry.appendChild(currCountry);
 
 			searchLabel.htmlFor = `${modalInputSearch.id}`;
-			searchSymb.classList.add("fa-search");
-			searchLabel.appendChild(searchSymb);
 
 			[heading, modalCurrentCountry, searchLabel, modalInputSearch].forEach(
 				(formElem) => {
@@ -394,8 +396,8 @@ const drawSection = async (id, media) => {
 		}
 	}
 	function highlightCurrCountry(countryName) {
-		// Highlight selected country in the list of countries when
-		// modal is opened.
+		// Highlight selected current country in the list of countries when
+		// modal is opened. Add a tick icon simultaneously
 
 		let ul, li, i, a, txtValue;
 		ul = document.getElementById("countries-list");
@@ -405,7 +407,11 @@ const drawSection = async (id, media) => {
 			a = li[i].getElementsByTagName("a")[0];
 			txtValue = a.textContent || a.innerText;
 			if (txtValue === countryName) {
-				li[i].style.backgroundColor = "rgba(50, 50, 50, 0.5)";
+				li[i].style.backgroundColor = "rgba(25, 150, 150, 0.5)";
+				li[i].style.transform = "scale(1.025)";
+				const tickIcon = renderElement('i', 'fa');
+				tickIcon.classList.add('fa-check');
+				li[i].append(tickIcon);
 			}
 		}
 	}
