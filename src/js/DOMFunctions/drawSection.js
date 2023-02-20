@@ -85,12 +85,6 @@ const drawSection = async (id, media) => {
 		return introContainer;
 	};
 
-	const drawSummary = () => {
-		const para = document.createElement("p");
-		para.textContent = details.summary;
-		para.classList.add("summary");
-		return para;
-	};
 	const drawSubInfos = () => {
 		const container = document.createElement("div");
 		container.classList.add("subinfo-container");
@@ -130,6 +124,13 @@ const drawSection = async (id, media) => {
 		}
 
 		return container;
+	};
+
+	const drawSummary = () => {
+		const para = document.createElement("p");
+		para.textContent = details.summary;
+		para.classList.add("summary");
+		return para;
 	};
 
 	const drawProviders = () => {
