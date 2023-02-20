@@ -48,8 +48,6 @@ const drawSection = async (id, media) => {
 		const img = renderImg(imgSize);
 		img ? introContainer.appendChild(img) : "";
 
-		introContainer.appendChild(writeSummary());
-
 		function createTitle() {
 			const title = document.createElement("h1");
 			title.textContent = details.mName;
@@ -79,21 +77,20 @@ const drawSection = async (id, media) => {
 		}
 
 		function writeTagline() {
-			const tagPara = document.createElement("p");
+			const tagPara = document.createElement("em");
 			tagPara.textContent = details.tagline;
 			tagPara.classList.add("tagline");
 			return tagPara;
 		}
-
-		function writeSummary() {
-			const para = document.createElement("p");
-			para.textContent = details.summary;
-			para.classList.add("summary");
-			return para;
-		}
 		return introContainer;
 	};
 
+	const drawSummary = () => {
+		const para = document.createElement("p");
+		para.textContent = details.summary;
+		para.classList.add("summary");
+		return para;
+	};
 	const drawSubInfos = () => {
 		const container = document.createElement("div");
 		container.classList.add("subinfo-container");
@@ -176,17 +173,19 @@ const drawSection = async (id, media) => {
 			}
 		});
 		function applyChooseCountryFncs() {
-			const countries = document.querySelectorAll('.country-container');
-			countries.forEach(country => country.addEventListener("click", (e) => {
-				e.preventDefault();
-				if(country.lastChild.textContent) {
-					const selectedCountry = country.lastChild.textContent;
-					clearProvider();
-					drawProvider(selectedCountry);
-				} 
-				document.querySelector('.modal-country-container').remove();
-				document.querySelector('.face-mask').style.display = "none";
-			}))
+			const countries = document.querySelectorAll(".country-container");
+			countries.forEach((country) =>
+				country.addEventListener("click", (e) => {
+					e.preventDefault();
+					if (country.lastChild.textContent) {
+						const selectedCountry = country.lastChild.textContent;
+						clearProvider();
+						drawProvider(selectedCountry);
+					}
+					document.querySelector(".modal-country-container").remove();
+					document.querySelector(".face-mask").style.display = "none";
+				})
+			);
 		}
 
 		return providerContainer;
@@ -294,7 +293,7 @@ const drawSection = async (id, media) => {
 			modalInputSearch.addEventListener("keyup", filterResults);
 			modalInputSearch.addEventListener("submit", (e) => {
 				e.preventDefault();
-			})
+			});
 
 			// Find current country name and code.
 			const currCountryFlag = renderCountryFlag(
@@ -407,8 +406,8 @@ const drawSection = async (id, media) => {
 			if (txtValue === countryName) {
 				li[i].style.backgroundColor = "rgba(25, 150, 150, 0.5)";
 				li[i].style.transform = "scale(1.025)";
-				const tickIcon = renderElement('i', 'fa');
-				tickIcon.classList.add('fa-check');
+				const tickIcon = renderElement("i", "fa");
+				tickIcon.classList.add("fa-check");
 				li[i].append(tickIcon);
 			}
 		}
@@ -419,6 +418,7 @@ const drawSection = async (id, media) => {
 		drawAll,
 		drawIntro,
 		drawSubInfos,
+		drawSummary,
 		drawProviders,
 	};
 };
