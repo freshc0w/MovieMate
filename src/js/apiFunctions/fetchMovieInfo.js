@@ -52,6 +52,9 @@ async function fetchMovieReccos(movie_id) {
 					id: movie.id,
 					poster_path: movie.poster_path,
 					backdrop_path: movie.backdrop_path,
+					release_date: movie.release_date,
+					vote_count: movie.vote_count,
+					vote_average: movie.vote_average,
 				};
 				if (count === 5) {
 					// Max 5 movies to be recommended

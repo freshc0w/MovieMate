@@ -10,9 +10,8 @@ async function drawSections(title) {
 
 	// Make an arr w/ elems of [id, media]
 	for (let id in ids) {
-		// Temp make it so that it only accepts movies
 
-		ids[id] === "movie" ? sections.push([id, ids[id]]) : "";
+		sections.push([id, ids[id]])
 	}
 
 	sections.forEach(

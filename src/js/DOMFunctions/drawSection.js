@@ -1,4 +1,5 @@
 import * as movie from "../apiFunctions/fetchMovieInfo";
+import * as tv from "../apiFunctions/fetchTvInfo"
 
 /*
 Draw an individual section based on user input query.
@@ -12,8 +13,9 @@ This section will consts of the overall movie/tv's
 
 const drawSection = async (id, media) => {
 	const section = document.createElement("section");
-	const details = await getInfo(id, movie.fetchMovieDetails, "");
-	const recs = await getInfo(id, movie.fetchMovieReccos, "");
+	const details = await getInfo(id, movie.fetchMovieDetails, tv.fetchTvDetails);
+	console.log(details)
+	const recs = await getInfo(id, movie.fetchMovieReccos, tv.fetchTvReccos);
 	const providers = await getInfo(id, movie.fetchMovieProviders, "");
 	console.log(providers);
 	const trailer = await getInfo(id, movie.fetchMovieTrailer, "");
@@ -34,7 +36,7 @@ const drawSection = async (id, media) => {
 	}
 
 	async function getInfo(id, movieFnc, tvFnc) {
-		return media === "movie" ? await movieFnc(id) : "";
+		return media === "movie" ? await movieFnc(id) : await tvFnc(id);
 	}
 
 	// Draw (if any) title, photo, tagline, and summary.
@@ -50,7 +52,7 @@ const drawSection = async (id, media) => {
 
 		function createTitle() {
 			const title = document.createElement("h1");
-			title.textContent = details.mName;
+			title.textContent = details.mName ? details.mName : details.tName;
 			title.classList.add("title");
 			return title;
 		}
@@ -94,16 +96,19 @@ const drawSection = async (id, media) => {
 				"Release Date:",
 				details.release_date.split("-").reverse().join("/")
 			),
-			createSubInfo("Genres:", details.genres.join(", ")),
-			createSubInfo("Runtime:", convertMinToHr(details.runtime)),
-			createSubInfo("Vote Average:", details.vote_average),
-			createSubInfo("Vote Count:", details.vote_count),
-			createSubInfo("Popularity:", details.popularity),
+			createSubInfo("Genres: ", details.genres.join(", ")),
+			createSubInfo("Runtime: ", convertMinToHr(details.runtime)),
+			createSubInfo("Vote Average: ", details.vote_average),
+			createSubInfo("Vote Count: ", details.vote_count),
+			createSubInfo("Popularity: ", details.popularity),
+			createSubInfo("Est Episode Runtime: ", details.episode_run_time),
 		];
 
-		information.forEach((info) => container.appendChild(info));
+		console.log(information);
+		information.forEach((info) => info ? container.appendChild(info) : "");
 
 		function createSubInfo(category, info) {
+			if(!info) return;
 			const subInfo = document.createElement("div");
 			const categoryName = document.createElement("span");
 			const categoryInfo = document.createElement("span");

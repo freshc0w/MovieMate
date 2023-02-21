@@ -29,6 +29,7 @@ async function fetchIds(name) {
 			for (let i = 0; i < result.length; i++) {
 				ids[result[i].id] = result[i].media_type;
 			}
+			console.log(ids);
 			return ids;
 		} else {
 			alert(`No results found for ${name}`);
