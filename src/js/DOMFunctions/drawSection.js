@@ -92,9 +92,9 @@ const drawSection = async (id, media) => {
 	const drawSubInfos = () => {
 		const container = document.createElement("div");
 		container.classList.add("subinfo-container");
-		
+
 		// Release date for movies and first aired for tv show.
-		let date, lastAired;  
+		let date, lastAired;
 		if (details.release_date) {
 			date = createSubInfo(
 				"Release Date:",
@@ -109,7 +109,7 @@ const drawSection = async (id, media) => {
 			lastAired = createSubInfo(
 				"Last Aired: ",
 				details.last_air_date.split("-").reverse().join("/")
-			)
+			);
 		} else {
 			date = "";
 		}
@@ -128,7 +128,6 @@ const drawSection = async (id, media) => {
 			createSubInfo("Vote Average: ", details.vote_average),
 			createSubInfo("Vote Count: ", details.vote_count),
 			createSubInfo("Popularity: ", details.popularity),
-
 		];
 
 		information.forEach((info) => (info ? container.appendChild(info) : ""));
