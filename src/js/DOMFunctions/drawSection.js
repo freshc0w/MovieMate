@@ -22,13 +22,14 @@ const drawSection = async (id, media) => {
 	);
 	const trailer = await getInfo(id, movie.fetchMovieTrailer, tv.fetchTvTrailer);
 	const reviews = await getInfo(id, movie.fetchMovieReviews, tv.fetchTvReviews);
+	console.log(reviews);
 
 	function drawAll() {
 		addToSection(drawIntro());
 	}
 
 	function addToSection(part) {
-		section.appendChild(part);
+		part ? section.appendChild(part) : "";
 	}
 
 	function renderElement(tag, className) {
@@ -283,6 +284,58 @@ const drawSection = async (id, media) => {
 		}
 	};
 
+	const drawReviews = () => {
+		if (!reviews) return;
+		const reviewContainer = renderElement("div", "review-container");
+		const title = renderElement("h2", "review-title");
+		title.textContent = "Reviews:";
+
+		reviews.forEach((review) => drawReview(review, reviewContainer));
+		return reviewContainer;
+	};
+
+	const drawReview = (review, container) => {
+		const reviewContent = renderElement("p", "review-content");
+		const reviewFooter = renderElement("div", "review-footer");
+		console.log(review.author);
+
+		const renderReviewHeading = () => {
+			const reviewHeading = renderElement("div", "review-heading");
+
+			addRevInfo(review.author, reviewHeading, "span", "review-author");
+
+			// Render author's profile pic if any.
+			if (review.pic_path) {
+				const authorPic = renderElement("img", "author-pic");
+				console.log(review.pic_path.slice(1, 6));
+				if (review.pic_path.slice(1, 5) !== "http") {
+					authorPic.src = `https://image.tmdb.org/t/p/w300/${review.pic_path}`;
+				} else {
+					authorPic.src = review.pic_path.slice(1);
+				}
+
+				authorPic.alt = `${review.author} profile picture.`;
+				reviewHeading.appendChild(authorPic);
+			}
+
+			addRevInfo(review.rating, reviewHeading, "span", "review-rating");
+			console.log(reviewHeading);
+			return reviewHeading;
+		};
+
+		container.appendChild(renderReviewHeading());
+
+		// Helper fnc that collects corresponding info and
+		// creates a span/div container if info exists. Otherwise, return;
+		function addRevInfo(info, container, tag, className) {
+			const infoContainer = renderElement(tag, className);
+			if (info) {
+				infoContainer.textContent = info;
+			}
+			container.appendChild(infoContainer);
+		}
+	};
+
 	function renderCountriesModal(currCountryName) {
 		// Country names
 		const providerCountries = Object.keys(providers);
@@ -457,6 +510,7 @@ const drawSection = async (id, media) => {
 		drawSubInfos,
 		drawSummary,
 		drawProviders,
+		drawReviews,
 	};
 };
 

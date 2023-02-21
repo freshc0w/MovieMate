@@ -24,6 +24,7 @@ async function drawSections(title) {
 		section.addToSection(section.drawSubInfos());
 		section.addToSection(section.drawSummary());
 		section.addToSection(section.drawProviders());
+		section.addToSection(section.drawReviews());
 		main.appendChild(section.section);
 		return renderSection;
 	}
