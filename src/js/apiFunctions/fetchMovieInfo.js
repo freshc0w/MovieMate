@@ -198,6 +198,7 @@ async function fetchMovieReviews(movie_id) {
 	}
 }
 
+// Helper fncs
 function getCountryName(code) {
 	let regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 	return regionNames.of(code);

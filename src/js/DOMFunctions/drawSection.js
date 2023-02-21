@@ -1,5 +1,5 @@
 import * as movie from "../apiFunctions/fetchMovieInfo";
-import * as tv from "../apiFunctions/fetchTvInfo"
+import * as tv from "../apiFunctions/fetchTvInfo";
 
 /*
 Draw an individual section based on user input query.
@@ -14,12 +14,14 @@ This section will consts of the overall movie/tv's
 const drawSection = async (id, media) => {
 	const section = document.createElement("section");
 	const details = await getInfo(id, movie.fetchMovieDetails, tv.fetchTvDetails);
-	console.log(details)
 	const recs = await getInfo(id, movie.fetchMovieReccos, tv.fetchTvReccos);
-	const providers = await getInfo(id, movie.fetchMovieProviders, "");
-	console.log(providers);
-	const trailer = await getInfo(id, movie.fetchMovieTrailer, "");
-	const reviews = await getInfo(id, movie.fetchMovieReviews, "");
+	const providers = await getInfo(
+		id,
+		movie.fetchMovieProviders,
+		tv.fetchTvProviders
+	);
+	const trailer = await getInfo(id, movie.fetchMovieTrailer, tv.fetchTvTrailer);
+	const reviews = await getInfo(id, movie.fetchMovieReviews, tv.fetchTvReviews);
 
 	function drawAll() {
 		addToSection(drawIntro());
@@ -90,25 +92,51 @@ const drawSection = async (id, media) => {
 	const drawSubInfos = () => {
 		const container = document.createElement("div");
 		container.classList.add("subinfo-container");
-
-		const information = [
-			createSubInfo(
+		
+		// Release date for movies and first aired for tv show.
+		let date, lastAired;  
+		if (details.release_date) {
+			date = createSubInfo(
 				"Release Date:",
 				details.release_date.split("-").reverse().join("/")
-			),
+			);
+			lastAired = "";
+		} else if (details.first_air_date) {
+			date = createSubInfo(
+				"First Aired: ",
+				details.first_air_date.split("-").reverse().join("/")
+			);
+			lastAired = createSubInfo(
+				"Last Aired: ",
+				details.last_air_date.split("-").reverse().join("/")
+			)
+		} else {
+			date = "";
+		}
+		let runtime = details.runtime ? convertMinToHr(details.runtime) : "";
+
+		const information = [
+			date,
+			lastAired,
+			createSubInfo("Show status:", details.status),
+			createSubInfo("Runtime: ", runtime),
 			createSubInfo("Genres: ", details.genres.join(", ")),
-			createSubInfo("Runtime: ", convertMinToHr(details.runtime)),
+			createSubInfo("Number of seasons: ", details.number_of_seasons),
+			createSubInfo("Est Avg Episode Runtime: ", details.episode_run_time),
+			createSubInfo("Country of Origin: ", details.origin_country),
+
 			createSubInfo("Vote Average: ", details.vote_average),
 			createSubInfo("Vote Count: ", details.vote_count),
 			createSubInfo("Popularity: ", details.popularity),
-			createSubInfo("Est Episode Runtime: ", details.episode_run_time),
+
 		];
 
-		console.log(information);
-		information.forEach((info) => info ? container.appendChild(info) : "");
+		information.forEach((info) => (info ? container.appendChild(info) : ""));
 
 		function createSubInfo(category, info) {
-			if(!info) return;
+			// Ignores tv subinfo to be displayed if it's a movie and
+			// viceversa
+			if (!info) return;
 			const subInfo = document.createElement("div");
 			const categoryName = document.createElement("span");
 			const categoryInfo = document.createElement("span");
