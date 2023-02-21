@@ -90,6 +90,10 @@ const drawSection = async (id, media) => {
 		container.classList.add("subinfo-container");
 
 		const information = [
+			createSubInfo(
+				"Release Date:",
+				details.release_date.split("-").reverse().join("/")
+			),
 			createSubInfo("Genres:", details.genres.join(", ")),
 			createSubInfo("Runtime:", convertMinToHr(details.runtime)),
 			createSubInfo("Vote Average:", details.vote_average),

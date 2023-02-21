@@ -22,6 +22,7 @@ async function fetchMovieDetails(movie_id) {
 			runtime: data.runtime,
 			poster_path: data.poster_path,
 			backdrop_path: data.backdrop_path,
+			release_date: data.release_date,
 		};
 		return generalInfo;
 	} catch (err) {
