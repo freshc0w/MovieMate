@@ -256,12 +256,27 @@ Reviews styling
 /*
 Movie/TvShow recommendation styling
 */
+.rec-container {
+    display: flex;
+    gap: clamp(5px, 5%, 15px);
+    padding: 5px;
+}
 .rec-poster {
     width: 100px;
     border-radius: 1rem;
+    box-shadow: 0 0 2px white;
 }
-
+.rec-info {
+    font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+    padding: 5px;
+}
+.rec-info > p {
+    margin-bottom: 0.2rem;
+}
 .rec-link {
     cursor: pointer;
     text-decoration: underline;
+}
+.rec-link:hover {
+    color: aqua;
 }

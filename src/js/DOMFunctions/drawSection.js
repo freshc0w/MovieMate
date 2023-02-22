@@ -413,7 +413,12 @@ const drawSection = async (id, media) => {
 	};
 	const drawRecs = () => {
 		const recsContainer = renderElement("div", "recs-container");
-		if (!recs) return recsContainer;
+		if (!recs) {
+			const noneMsg = renderElement('h4', 'no-review-msg');
+			noneMsg.textContent = "No recommendations found";
+			recsContainer.appendChild(noneMsg);
+			return recsContainer;
+		};
 		for (let rec in recs) {
 			recsContainer.appendChild(drawRec(recs[rec]));
 		}
@@ -421,7 +426,6 @@ const drawSection = async (id, media) => {
 	};
 
 	const drawRec = (rec) => {
-		console.log(rec);
 		const recContainer = renderElement("div", "rec-container");
 		const recPoster = renderElement("img", "rec-poster");
 		const info = renderElement("div", "rec-info");
