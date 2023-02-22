@@ -26,5 +26,5 @@ console.log("Hello World");
 
 addSubmitSearchFnc();
 // drawSections("iron man");
-drawSections("Game of Thrones");
+drawSections("Iron Man");
 // drawSections("pee mak");

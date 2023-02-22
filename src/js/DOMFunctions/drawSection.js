@@ -166,6 +166,11 @@ const drawSection = async (id, media) => {
 		return container;
 	};
 
+	const drawSummaryHeading = () => {
+		const heading = document.createElement('h2');
+		heading.textContent = "Synopsis: "
+		return heading;
+	}
 	const drawSummary = () => {
 		const para = document.createElement("p");
 		para.textContent = details.summary;
@@ -644,6 +649,7 @@ const drawSection = async (id, media) => {
 		drawAll,
 		drawIntro,
 		drawSubInfos,
+		drawSummaryHeading,
 		drawSummary,
 		drawProviders,
 		drawReviews,

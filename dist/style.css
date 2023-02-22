@@ -65,6 +65,9 @@ section {
 .subinfo-container {
     max-width: 300px;
 }
+.intro-sub-info {
+    max-width: 310px;
+}
 .sub-info {
     margin-bottom: .25rem;
     display: flex;
@@ -73,7 +76,20 @@ section {
 .category-info {
     text-align: end;
 }
-
+.synopsis-watch-providers {
+    padding-left: 0.5rem;
+    align-self: start;
+    padding-top: 4rem;
+}
+.synopsis-watch-providers > * {
+    margin-bottom: 2vh;
+}
+.provider-container {
+    margin-top: 4vh;
+}
+.service-name {
+    margin-bottom: 0.6rem;
+}
 /* 
 Information intro styling
 */
@@ -82,6 +98,7 @@ Information intro styling
     flex-direction: column;
     align-items: center;
     gap: .5rem;
+    text-align: center;
 }
 .title {
     font-family: 'Times New Roman', Times, serif;
@@ -98,6 +115,7 @@ Information intro styling
     text-align: justify;
 }
 
+
 /*
 sub-info styling
 */
@@ -108,15 +126,23 @@ Watch provider styling
 .provider-service-container {
 	margin-bottom: 5px;
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
 	place-items: center;
-	gap: max(2vw, 0.5rem);
+    align-items: start;
+	gap: max(1vw, 0.25rem);
+}
+.synopsis-watch-providers > h2 {
+    font-size: 1.6rem;
 }
 .provider-img {
-	width: 35px;
+	border-radius: 1rem;
+    width: clamp(35px, 6.5vw, 65px);
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
+    
 }
 .provider-name {
 	text-align: center;
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
 }
 
 .provider-service {
@@ -318,5 +344,47 @@ Movie/TvShow recommendation styling
 }
 .rec-link:hover {
     color: aqua;
+}
+
+@media screen and (max-width: 850px) {
+    .poster {
+        width: 225px;
+    }
+
+    .summary {
+        font-size: 0.9rem;
+    }
+    .trailer-video {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 775px) {
+    .poster {
+        width: 175px;
+    }
+    section {
+        grid-template-columns: 1.5fr 2.5fr;
+    }
+    .summary {
+        font-size: 0.8rem;
+    }
+    .provider-service-container {
+        margin-bottom: 3px;
+        grid-template-columns: repeat(auto-fill, minmax(65px, 1.5fr));
+        gap: max(0.75vw, 0.22rem);
+    }
+    .sub-info {
+        font-size: 0.8rem;
+    }
+    .service-name-bold {
+        font-size: 1.05rem;
+    }
+    .synopsis-watch-providers {
+        margin-bottom: 1vh;
+    }
+    .synopsis-watch-providers > h2 {
+        font-size: 1.15rem;
+    }
 }
 
