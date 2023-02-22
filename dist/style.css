@@ -251,3 +251,17 @@ Reviews styling
 .review-updated {
     text-align: end;
 }
+
+
+/*
+Movie/TvShow recommendation styling
+*/
+.rec-poster {
+    width: 100px;
+    border-radius: 1rem;
+}
+
+.rec-link {
+    cursor: pointer;
+    text-decoration: underline;
+}

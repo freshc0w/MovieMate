@@ -1,5 +1,6 @@
 import * as movie from "../apiFunctions/fetchMovieInfo";
 import * as tv from "../apiFunctions/fetchTvInfo";
+import * as page from "./drawSections";
 
 /*
 Draw an individual section based on user input query.
@@ -15,6 +16,7 @@ const drawSection = async (id, media) => {
 	const section = document.createElement("section");
 	const details = await getInfo(id, movie.fetchMovieDetails, tv.fetchTvDetails);
 	const recs = await getInfo(id, movie.fetchMovieReccos, tv.fetchTvReccos);
+	console.log(recs);
 	const providers = await getInfo(
 		id,
 		movie.fetchMovieProviders,
@@ -372,7 +374,7 @@ const drawSection = async (id, media) => {
 	const drawTrailer = () => {
 		const trailerContainer = renderElement("div", "trailer-container");
 		const trailerHeading = renderElement("div", "trailer-heading");
-		
+
 		if (trailer) {
 			renderTrailerHeading().forEach((elem) =>
 				trailerHeading.appendChild(elem)
@@ -399,16 +401,72 @@ const drawSection = async (id, media) => {
 				src: `https://youtube.com/embed/${key}`,
 				title: `${site} video player`,
 				frameborder: "0",
-				allow: "accelerometer; autoplay; clipboard-write; encrypted media; gyroscope; picture-in-picture; web-share",
-			}
-			for(let attr in attributes) {
+				allow:
+					"accelerometer; autoplay; clipboard-write; encrypted media; gyroscope; picture-in-picture; web-share",
+			};
+			for (let attr in attributes) {
 				frame.setAttribute(attr, attributes[attr]);
-				frame.setAttribute("allowfullscreen", true)
+				frame.setAttribute("allowfullscreen", true);
 			}
 			return frame;
 		}
 	};
-	const drawRecs = () => {};
+	const drawRecs = () => {
+		const recsContainer = renderElement("div", "recs-container");
+		if (!recs) return recsContainer;
+		for (let rec in recs) {
+			recsContainer.appendChild(drawRec(recs[rec]));
+		}
+		return recsContainer;
+	};
+
+	const drawRec = (rec) => {
+		console.log(rec);
+		const recContainer = renderElement("div", "rec-container");
+		const recPoster = renderElement("img", "rec-poster");
+		const info = renderElement("div", "rec-info");
+
+		recPoster.src = `https://image.tmdb.org/t/p/w300/${rec.poster_path}`;
+
+		recContainer.appendChild(recPoster);
+		renderInfo(rec).forEach((subInfo) => info.appendChild(subInfo));
+
+		const recLink = renderElement("a", "rec-link");
+		const mediaType = rec.tName ? "TV Show" : "Movie";
+		recLink.textContent = `Search for this ${mediaType} -> `;
+		recLink.addEventListener("click", async (e) => {
+			e.preventDefault();
+			page.clearSections();
+			rec.tName
+				? await page.drawSections(rec.tName)
+				: await page.drawSections(rec.mName);
+		});
+
+		info.appendChild(recLink);
+		recContainer.appendChild(info);
+		return recContainer;
+
+		function renderInfo(subInfo) {
+			if (subInfo) {
+				// If info exists.
+				const recName = renderElement("p", "rec-name");
+				const recDate = renderElement("p", "rec-date");
+				const voteCount = renderElement("p", "rec-vote-count");
+				const voteAvg = renderElement("p", "rec-vote-avg");
+
+				recName.textContent = subInfo.tName
+					? `Name: ${subInfo.tName}`
+					: `Name: ${subInfo.mName}`;
+				recDate.textContent = subInfo.first_air_date
+					? `First Air Date: ${subInfo.first_air_date}`
+					: `Release Date: ${subInfo.release_date}`;
+				voteCount.textContent = `Vote Count: ${subInfo.vote_count}`;
+				voteAvg.textContent = `Vote Avg: ${subInfo.vote_average}`;
+
+				return [recName, recDate, voteCount, voteAvg];
+			}
+		}
+	};
 
 	function renderCountriesModal(currCountryName) {
 		// Country names
@@ -586,6 +644,7 @@ const drawSection = async (id, media) => {
 		drawProviders,
 		drawReviews,
 		drawTrailer,
+		drawRecs,
 	};
 };
 

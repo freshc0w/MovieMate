@@ -47,7 +47,7 @@ async function fetchTvReccos(tv_id) {
 			`https://api.themoviedb.org/3/tv/${tv_id}/recommendations?api_key=${API_KEY}&language=en-US&page=1`,
 			{ mode: "cors" }
 		);
-		const data = response.json();
+		const data = await response.json();
 
 		const recTvs = {};
 		if (data.results) {
