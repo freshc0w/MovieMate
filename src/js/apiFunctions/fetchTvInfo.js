@@ -142,7 +142,7 @@ async function fetchTvProviders(tv_id) {
 // Find tv trailer
 async function fetchTvTrailer(tv_id) {
 	try {
-		let movieTrailer;
+		let tvTrailer;
 		const response = await fetch(
 			`https://api.themoviedb.org/3/tv/${tv_id}/videos?api_key=${API_KEY}`,
 			{ mode: "cors" }
@@ -158,15 +158,15 @@ async function fetchTvTrailer(tv_id) {
 		});
 
 		official.length !== 0
-			? (movieTrailer = official[0])
-			: (movieTrailer = trailers[0]);
+			? (tvTrailer = official[0])
+			: (tvTrailer = trailers[0]);
 
 		return {
-			tName: movieTrailer.name,
-			key: movieTrailer.key,
-			site: movieTrailer.site,
-			type: movieTrailer.type,
-			lang: getLanguage(movieTrailer.iso_639_1),
+			tName: tvTrailer.name,
+			key: tvTrailer.key,
+			site: tvTrailer.site,
+			type: tvTrailer.type,
+			lang: getLanguage(tvTrailer.iso_639_1),
 		};
 	} catch (err) {
 		alert(err);

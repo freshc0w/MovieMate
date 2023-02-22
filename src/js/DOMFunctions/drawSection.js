@@ -21,6 +21,7 @@ const drawSection = async (id, media) => {
 		tv.fetchTvProviders
 	);
 	const trailer = await getInfo(id, movie.fetchMovieTrailer, tv.fetchTvTrailer);
+	console.log(trailer);
 	const reviews = await getInfo(id, movie.fetchMovieReviews, tv.fetchTvReviews);
 	console.log(reviews);
 
@@ -306,44 +307,47 @@ const drawSection = async (id, media) => {
 				} else {
 					authorPic.src = review.pic_path.slice(1);
 				}
-				
+
 				authorPic.alt = `${review.author} profile picture.`;
 				reviewHeading.appendChild(authorPic);
 			}
-			
+
 			addRevInfo(review.author, reviewHeading, "h3", "review-author");
-			
-			
+
 			addRevInfo(review.rating, reviewHeading, "span", "review-rating");
-			
+
 			return reviewHeading;
 		};
-		
+
 		const renderReviewBody = () => {
 			const reviewContent = renderElement("p", "review-content");
 			reviewContent.textContent = `"${review.content}"`;
 			return reviewContent;
-		}
+		};
 
 		const renderReviewFooter = () => {
 			const reviewFooter = renderElement("div", "review-footer");
-			const reviewUrl = renderElement('a', 'review-link');
-			const reviewUpdated = renderElement('span', 'review-updated');
+			const reviewUrl = renderElement("a", "review-link");
+			const reviewUpdated = renderElement("span", "review-updated");
 
-			reviewUrl.setAttribute('href', `${review.url}`)
+			reviewUrl.setAttribute("href", `${review.url}`);
+			reviewUrl.setAttribute("target", "_blank");
 			reviewUrl.textContent = "Click for review link";
 
-			reviewUpdated.textContent = `Last updated: ${formatRevDate(review.last_updated)}`;
+			reviewUpdated.textContent = `Last updated: ${formatRevDate(
+				review.last_updated
+			)}`;
+
 			reviewFooter.appendChild(reviewUrl);
 			reviewFooter.appendChild(reviewUpdated);
 
 			return reviewFooter;
 			function formatRevDate(date) {
 				date = date.split("-");
-				date[2] = date[2].slice(0, 2) + "/"
+				date[2] = date[2].slice(0, 2) + "/";
 				return date[2].concat(date.slice(0, 2).reverse().join("/"));
 			}
-		}
+		};
 
 		container.appendChild(renderReviewHeading());
 		container.appendChild(renderReviewBody());
@@ -358,12 +362,53 @@ const drawSection = async (id, media) => {
 			}
 
 			// Reviews out of 10
-			if(info === review.rating) {
-				infoContainer.textContent = `${info}/10`
+			if (info === review.rating) {
+				infoContainer.textContent = `${info}/10`;
 			}
 			container.appendChild(infoContainer);
 		}
 	};
+
+	const drawTrailer = () => {
+		const trailerContainer = renderElement("div", "trailer-container");
+		const trailerHeading = renderElement("div", "trailer-heading");
+		
+		if (trailer) {
+			renderTrailerHeading().forEach((elem) =>
+				trailerHeading.appendChild(elem)
+			);
+			trailerContainer.appendChild(trailerHeading);
+			trailerContainer.appendChild(addVideo(trailer.key, trailer.site));
+		}
+		return trailerContainer;
+
+		function renderTrailerHeading() {
+			const trailerName = renderElement("h2", "trailer-name");
+			const trailerLanguage = renderElement("h3", "trailer-lang");
+			trailerName.textContent = `${trailer.tName}`;
+			trailerLanguage.textContent = `Language: ${trailer.lang}`;
+
+			return [trailerName, trailerLanguage];
+		}
+
+		function addVideo(key, site) {
+			const frame = renderElement("iframe", "trailer-video");
+			const attributes = {
+				width: "560",
+				height: "315",
+				src: `https://youtube.com/embed/${key}`,
+				title: `${site} video player`,
+				frameborder: "0",
+				allow: "accelerometer; autoplay; clipboard-write; encrypted media; gyroscope; picture-in-picture; web-share",
+			}
+			for(let attr in attributes) {
+				frame.setAttribute(attr, attributes[attr]);
+				frame.setAttribute("allowfullscreen", true)
+			}
+			return frame;
+		}
+	};
+	const drawRecs = () => {};
 
 	function renderCountriesModal(currCountryName) {
 		// Country names
@@ -540,6 +585,7 @@ const drawSection = async (id, media) => {
 		drawSummary,
 		drawProviders,
 		drawReviews,
+		drawTrailer,
 	};
 };
 

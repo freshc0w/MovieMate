@@ -157,7 +157,7 @@ async function fetchMovieTrailer(movie_id) {
 			: (movieTrailer = trailers[0]);
 
 		return {
-			mName: movieTrailer.name,
+			tName: movieTrailer.name,
 			key: movieTrailer.key,
 			site: movieTrailer.site,
 			type: movieTrailer.type,

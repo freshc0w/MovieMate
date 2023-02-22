@@ -248,3 +248,6 @@ Reviews styling
     display: flex;
     justify-content: space-between;
 }
+.review-updated {
+    text-align: end;
+}
