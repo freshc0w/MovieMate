@@ -296,10 +296,9 @@ const drawSection = async (id, media) => {
 	};
 
 	const drawReview = (review, container) => {
-		const reviewContent = renderElement("p", "review-content");
 		const reviewFooter = renderElement("div", "review-footer");
 		console.log(review.author);
-
+		
 		const renderReviewHeading = () => {
 			const reviewHeading = renderElement("div", "review-heading");
 			// Render author's profile pic if any.
@@ -310,20 +309,27 @@ const drawSection = async (id, media) => {
 				} else {
 					authorPic.src = review.pic_path.slice(1);
 				}
-
+				
 				authorPic.alt = `${review.author} profile picture.`;
 				reviewHeading.appendChild(authorPic);
 			}
-
-			addRevInfo(review.author, reviewHeading, "span", "review-author");
-
-
+			
+			addRevInfo(review.author, reviewHeading, "h3", "review-author");
+			
+			
 			addRevInfo(review.rating, reviewHeading, "span", "review-rating");
-
+			
 			return reviewHeading;
 		};
+		
+		const renderReviewBody = () => {
+			const reviewContent = renderElement("p", "review-content");
+			reviewContent.textContent = `"${review.content}"`;
+			return reviewContent;
+		}
 
 		container.appendChild(renderReviewHeading());
+		container.appendChild(renderReviewBody());
 
 		// Helper fnc that collects corresponding info and
 		// creates a span/div container if info exists. Otherwise, return;

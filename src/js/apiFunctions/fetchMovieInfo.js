@@ -180,7 +180,6 @@ async function fetchMovieReviews(movie_id) {
 		const data = await response.json();
 		if (data.results.length === 0) return false;
 
-		let count = 1;
 		data.results.forEach((review) => {
 			reviews.push({
 				author: review.author,
@@ -190,9 +189,8 @@ async function fetchMovieReviews(movie_id) {
 				url: review.url,
 				last_updated: review.updated_at,
 			});
-			count++;
 		});
-		return reviews.slice(0, 5);
+		return reviews.slice(0, 5); // First 5 reviews returned
 	} catch (err) {
 		alert(err);
 	}
