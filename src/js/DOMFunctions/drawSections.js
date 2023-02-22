@@ -27,21 +27,26 @@ async function drawSections(title) {
 		introSubInfo.classList.add("intro-sub-info");
 		introSubInfo.appendChild(section.drawIntro("300"));
 		introSubInfo.appendChild(section.drawSubInfos());
-		section.addToSection(introSubInfo);
-
+		
 		const synopsisWatchPvders = document.createElement('div');
 		synopsisWatchPvders.classList.add("synopsis-watch-providers");
 		synopsisWatchPvders.appendChild(section.drawSummaryHeading());
 		synopsisWatchPvders.appendChild(section.drawSummary());
 		synopsisWatchPvders.appendChild(section.drawProviders()); 
-		section.addToSection(synopsisWatchPvders);
+		
+		const recHeading = document.createElement('h2');
+		recHeading.classList.add('rec-heading');
+		recHeading.textContent = 'RECOMMENDATIONS:'
 		
 		// section.addToSection(section.drawIntro("300"));
 		// section.addToSection(section.drawSubInfos());
 		// section.addToSection(section.drawSummary());
 		// section.addToSection(section.drawProviders());
+		section.addToSection(introSubInfo);
+		section.addToSection(synopsisWatchPvders);
 		section.addToSection(section.drawReviews());
 		section.addToSection(section.drawTrailer());
+		section.addToSection(recHeading);
 		section.addToSection(section.drawRecs());
 		main.appendChild(section.section);
 		return renderSection;

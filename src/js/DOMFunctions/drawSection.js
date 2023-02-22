@@ -385,7 +385,9 @@ const drawSection = async (id, media) => {
 				trailerHeading.appendChild(elem)
 			);
 			trailerContainer.appendChild(trailerHeading);
-			trailerContainer.appendChild(addVideo(trailer.key, trailer.site));
+			const videoWrapper = renderElement("div", "video-wrapper");
+			videoWrapper.appendChild(addVideo(trailer.key, trailer.site));
+			trailerContainer.appendChild(videoWrapper);
 		}
 		return trailerContainer;
 
@@ -401,6 +403,7 @@ const drawSection = async (id, media) => {
 		function addVideo(key, site) {
 			const frame = renderElement("iframe", "trailer-video");
 			const attributes = {
+				loading: "lazy",
 				width: "560",
 				height: "315",
 				src: `https://youtube.com/embed/${key}`,
