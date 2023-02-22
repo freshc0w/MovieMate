@@ -217,3 +217,22 @@ Countries modal styling.
 }
 
 
+/* 
+Reviews styling
+*/
+.author-pic {
+    width: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+    object-position: 50% 50%;
+}
+.review-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+.review-author {
+    flex: 1;
+    justify-self: flex-start;
+}
