@@ -86,7 +86,7 @@ const drawSection = async (id, media) => {
 
 		function writeTagline() {
 			const tagPara = document.createElement("em");
-			tagPara.textContent = details.tagline;
+			tagPara.textContent = `"${details.tagline}"`;
 			tagPara.classList.add("tagline");
 			return tagPara;
 		}

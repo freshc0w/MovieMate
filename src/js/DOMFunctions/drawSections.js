@@ -18,10 +18,19 @@ async function drawSections(title) {
 		async (section) => await renderSection(section[0], section[1])
 	);
 
+	
 	async function renderSection(id, media) {
 		const section = await drawSection(id, media);
-		section.addToSection(section.drawIntro("300"));
-		section.addToSection(section.drawSubInfos());
+
+		// Add wrapper divs for layout.
+		const introSubInfo = document.createElement('div');
+		introSubInfo.classList.add("intro-sub-info");
+		introSubInfo.appendChild(section.drawIntro("300"));
+		introSubInfo.appendChild(section.drawSubInfos());
+		section.addToSection(introSubInfo);
+		
+		// section.addToSection(section.drawIntro("300"));
+		// section.addToSection(section.drawSubInfos());
 		section.addToSection(section.drawSummary());
 		section.addToSection(section.drawProviders());
 		section.addToSection(section.drawReviews());
