@@ -289,6 +289,7 @@ const drawSection = async (id, media) => {
 		const reviewContainer = renderElement("div", "review-container");
 		const title = renderElement("h2", "review-title");
 		title.textContent = "Reviews:";
+		reviewContainer.appendChild(title);
 
 		reviews.forEach((review) => drawReview(review, reviewContainer));
 		return reviewContainer;
@@ -301,13 +302,9 @@ const drawSection = async (id, media) => {
 
 		const renderReviewHeading = () => {
 			const reviewHeading = renderElement("div", "review-heading");
-
-			addRevInfo(review.author, reviewHeading, "span", "review-author");
-
 			// Render author's profile pic if any.
 			if (review.pic_path) {
 				const authorPic = renderElement("img", "author-pic");
-				console.log(review.pic_path.slice(1, 6));
 				if (review.pic_path.slice(1, 5) !== "http") {
 					authorPic.src = `https://image.tmdb.org/t/p/w300/${review.pic_path}`;
 				} else {
@@ -318,8 +315,11 @@ const drawSection = async (id, media) => {
 				reviewHeading.appendChild(authorPic);
 			}
 
+			addRevInfo(review.author, reviewHeading, "span", "review-author");
+
+
 			addRevInfo(review.rating, reviewHeading, "span", "review-rating");
-			console.log(reviewHeading);
+
 			return reviewHeading;
 		};
 
@@ -331,6 +331,11 @@ const drawSection = async (id, media) => {
 			const infoContainer = renderElement(tag, className);
 			if (info) {
 				infoContainer.textContent = info;
+			}
+
+			// Reviews out of 10
+			if(info === review.rating) {
+				infoContainer.textContent = `${info}/10`
 			}
 			container.appendChild(infoContainer);
 		}
