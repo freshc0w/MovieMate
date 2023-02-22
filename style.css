@@ -1,5 +1,6 @@
 :root {
     --default-background-color: #0a1625;
+    --lighter-background-color: #16283f;
     --default-font: 'Montserrat', sans-serif;
 }
 
@@ -51,18 +52,47 @@ a {
 }
 
 /* 
+Whole section structure styling
+*/
+section {
+    max-width: 95vw;
+    display: grid;
+    grid-template-columns: 1.25fr 2.5fr;
+    place-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.subinfo-container {
+    max-width: 300px;
+}
+.sub-info {
+    margin-bottom: .25rem;
+    display: flex;
+    justify-content: space-between;
+}
+.category-info {
+    text-align: end;
+}
+
+/* 
 Information intro styling
 */
+.intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+}
 .title {
     font-family: 'Times New Roman', Times, serif;
     font-size: clamp(2rem, 3vw, 2.5rem);
     font-weight: 900;
 }
 .poster {
-    width: 250px;
+    width: 300px;
     border-radius: 1rem;
     box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.7);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 .summary {
     text-align: justify;
@@ -130,6 +160,12 @@ Countries modal styling.
 	right: 5px;
 	border-radius: 1rem;
 	padding: 0.25rem 0.35rem;
+}
+.modal-close-btn:hover {
+    background-color: red;
+    color: white;
+
+    transform: scale(1.05);
 }
 .modal-current-country {
 	display: flex;
@@ -251,6 +287,9 @@ Reviews styling
 .review-updated {
     text-align: end;
 }
+.review-link:hover {
+    color: whitesmoke;
+}
 
 
 /*
@@ -280,3 +319,4 @@ Movie/TvShow recommendation styling
 .rec-link:hover {
     color: aqua;
 }
+
