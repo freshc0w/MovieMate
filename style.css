@@ -244,3 +244,7 @@ Reviews styling
     overflow: hidden;
     text-align: justify;
 }
+.review-footer {
+    display: flex;
+    justify-content: space-between;
+}
