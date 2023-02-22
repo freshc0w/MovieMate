@@ -185,6 +185,7 @@ Information intro styling
 }
 .summary {
 	text-align: justify;
+    font-size: 1.3rem;
 }
 
 /*
@@ -204,6 +205,9 @@ Watch provider styling
 }
 .synopsis-watch-providers > h2 {
 	font-size: 1.6rem;
+}
+.lost-gif{
+    width: 70%;
 }
 .provider-img {
 	border-radius: 1rem;
@@ -569,6 +573,9 @@ Movie/TvShow recommendation styling
 		min-width: 70%;
 		max-width: 70%;
 	}
+    .lost-gif {
+        width: 85%;
+    }
 }
 
 @media screen and (max-width: 670px) {
@@ -588,4 +595,5 @@ Movie/TvShow recommendation styling
 	.trailer-container {
 		width: 90%;
 	}
+
 }
