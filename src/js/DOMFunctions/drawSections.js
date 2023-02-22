@@ -14,13 +14,16 @@ async function drawSections(title) {
 		sections.push([id, ids[id]])
 	}
 
+	
+	// draw all sections
 	sections.forEach(
 		async (section) => await renderSection(section[0], section[1])
-	);
-
+		);
+		
 	
 	async function renderSection(id, media) {
 		const section = await drawSection(id, media);
+
 
 		// Add wrapper divs for layout.
 		const introSubInfo = document.createElement('div');
@@ -49,9 +52,10 @@ async function drawSections(title) {
 		section.addToSection(recHeading);
 		section.addToSection(section.drawRecs());
 		main.appendChild(section.section);
-		return renderSection;
 	}
 }
+
+
 
 function clearSections() {
 	const main = document.querySelector(".main-container");

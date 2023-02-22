@@ -16,17 +16,15 @@ const drawSection = async (id, media) => {
 	const section = document.createElement("section");
 	const details = await getInfo(id, movie.fetchMovieDetails, tv.fetchTvDetails);
 	const recs = await getInfo(id, movie.fetchMovieReccos, tv.fetchTvReccos);
-	console.log(recs);
 	const providers = await getInfo(
 		id,
 		movie.fetchMovieProviders,
 		tv.fetchTvProviders
 	);
 	const trailer = await getInfo(id, movie.fetchMovieTrailer, tv.fetchTvTrailer);
-	console.log(trailer);
 	const reviews = await getInfo(id, movie.fetchMovieReviews, tv.fetchTvReviews);
-	console.log(reviews);
 
+	section.classList.add('section-container');
 	function drawAll() {
 		addToSection(drawIntro());
 	}
@@ -205,6 +203,12 @@ const drawSection = async (id, media) => {
 			availProviders = false;
 			countryBtn.textContent =
 				"No countries offer this tv/movie at the moment.";
+			const lostGif = renderElement("img", "lost-gif");
+			lostGif.src = './img/lost-gif.gif';
+			lostGif.alt = "Prover cannot be found picture."
+			houseContainer.style.display = "flex";
+			houseContainer.style.justifyContent = "center";
+			houseContainer.appendChild(lostGif);
 		}
 
 		// availProviders ? renderCountriesModal(countryBtn.textContent) : ""; // temp

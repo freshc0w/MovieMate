@@ -32,11 +32,11 @@ async function fetchIds(name) {
 			console.log(ids);
 			return ids;
 		} else {
-			alert(`No results found for ${name}`);
+			console.log(`No results found for ${name}`);
 			return;
 		}
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 

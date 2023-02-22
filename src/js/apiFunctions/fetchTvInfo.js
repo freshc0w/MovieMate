@@ -32,7 +32,7 @@ async function fetchTvDetails(tv_id) {
 		};
 		return generalInfo;
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -71,7 +71,7 @@ async function fetchTvReccos(tv_id) {
 		}
 		return recTvs;
 	} catch {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -135,7 +135,7 @@ async function fetchTvProviders(tv_id) {
 		}
 		return providersByCountry;
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -169,7 +169,7 @@ async function fetchTvTrailer(tv_id) {
 			lang: getLanguage(tvTrailer.iso_639_1),
 		};
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -199,7 +199,7 @@ async function fetchTvReviews(tv_id) {
 		});
 		return reviews.slice(0, 5);
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 

@@ -26,7 +26,7 @@ async function fetchMovieDetails(movie_id) {
 		};
 		return generalInfo;
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -65,7 +65,7 @@ async function fetchMovieReccos(movie_id) {
 		}
 		return recMovies;
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -129,7 +129,7 @@ async function fetchMovieProviders(movie_id) {
 		}
 		return providersByCountry;
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -164,7 +164,7 @@ async function fetchMovieTrailer(movie_id) {
 			lang: getLanguage(movieTrailer.iso_639_1),
 		};
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
@@ -192,7 +192,7 @@ async function fetchMovieReviews(movie_id) {
 		});
 		return reviews.slice(0, 5); // First 5 reviews returned
 	} catch (err) {
-		alert(err);
+		console.log(err);
 	}
 }
 
