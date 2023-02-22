@@ -296,9 +296,6 @@ const drawSection = async (id, media) => {
 	};
 
 	const drawReview = (review, container) => {
-		const reviewFooter = renderElement("div", "review-footer");
-		console.log(review.author);
-		
 		const renderReviewHeading = () => {
 			const reviewHeading = renderElement("div", "review-heading");
 			// Render author's profile pic if any.
@@ -328,8 +325,29 @@ const drawSection = async (id, media) => {
 			return reviewContent;
 		}
 
+		const renderReviewFooter = () => {
+			const reviewFooter = renderElement("div", "review-footer");
+			const reviewUrl = renderElement('a', 'review-link');
+			const reviewUpdated = renderElement('span', 'review-updated');
+
+			reviewUrl.setAttribute('href', `${review.url}`)
+			reviewUrl.textContent = "Click for review link";
+
+			reviewUpdated.textContent = `Last updated: ${formatRevDate(review.last_updated)}`;
+			reviewFooter.appendChild(reviewUrl);
+			reviewFooter.appendChild(reviewUpdated);
+
+			return reviewFooter;
+			function formatRevDate(date) {
+				date = date.split("-");
+				date[2] = date[2].slice(0, 2) + "/"
+				return date[2].concat(date.slice(0, 2).reverse().join("/"));
+			}
+		}
+
 		container.appendChild(renderReviewHeading());
 		container.appendChild(renderReviewBody());
+		container.appendChild(renderReviewFooter());
 
 		// Helper fnc that collects corresponding info and
 		// creates a span/div container if info exists. Otherwise, return;
