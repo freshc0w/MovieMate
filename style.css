@@ -52,6 +52,97 @@ a {
 	background-color: rgba(0, 0, 0, 0.45);
 }
 
+
+/* 
+Search Bar styling
+*/
+.search-bar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	text-align: center;
+}
+.search {
+	font-size: 1.25rem;
+}
+#input-search {
+	--opacity: 0.5;
+	--angle: 60deg;
+	outline-color: transparent;
+	width: 600px;
+	padding: 0.2rem 1rem;
+	font-size: 1.2rem;
+	font-family: "Montserrat", sans-serif;
+	background-color: var(--default-background-color);
+	color: whitesmoke;
+	text-transform: capitalize;
+
+	border: 0.2rem solid #a2fdf9;
+
+    /* Paint an image in the border */
+    background: rgb(255, 255, 255 / var(--opacity));
+	animation: rotate 4s linear infinite, opacityChange 4s infinite alternate;
+	/* animation-iteration-count: 1; */
+    border-radius: 0.5rem;
+}
+/* Animations */
+@supports (background: paint(houdini)) {
+     @property --opacity {
+      syntax: "<number>";
+      initial-value: 0.5;
+      inherits: false;
+    } 
+  
+     @property --angle {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    } 
+  
+    @keyframes opacityChange {
+      to {
+        --opacity: .75;
+      }
+    }
+  
+    @keyframes rotate {
+      to {
+        --angle: 360deg;
+      }
+    }
+}
+
+
+#input-search:focus {
+	outline: 0;
+	border-radius: 0;
+	/* border: 0; */
+	box-shadow: 0 0 8px rgba(0, 240, 240, 0.2), 0 0 16px rgba(0, 255, 255, 0.7);
+	border: 0.25rem solid transparent;
+	/* animation: rotate 2.5s linear infinite, opacityChange 2.5s infinite alternate; */
+	border-image: conic-gradient(
+        from var(--angle),
+        black 0deg 175deg,
+        #a2fdf9 175deg 180deg,
+		black 180deg 355deg,
+      #a2fdf9 355deg 360deg
+    )
+    1 stretch;
+}
+.saerch-wrapper {
+	display: flex;
+	align-items: center;
+}
+.search-query {
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	color: rgb(2, 206, 206);
+	background: transparent;
+	font-size: 1.3rem;
+}
+
 /* 
 Whole section structure styling
 */
@@ -500,6 +591,9 @@ Movie/TvShow recommendation styling
 }
 
 @media screen and (max-width: 1400px) {
+	#input-search {
+		width: 400px;
+	}
 	.poster {
 		width: 225px;
 		margin-left: -5%;
@@ -512,10 +606,14 @@ Movie/TvShow recommendation styling
 	}
 }
 @media screen and (max-width: 1000px) {
-}
-.intro-sub-info,
-.synopsis-watch-providers {
-	margin-top: 1.5vw;
+	.search-bar {
+		flex-direction: column;
+		gap: .2rem;
+	}
+	.intro-sub-info,
+	.synopsis-watch-providers {
+		margin-top: 1.5vw;
+	}
 }
 @media screen and (max-width: 775px) {
 	.poster {
@@ -590,6 +688,12 @@ Movie/TvShow recommendation styling
 }
 
 @media screen and (max-width: 620px) {
+	#input-search {
+		width: 300px;
+	}
+	.saerch-wrapper {
+		width: 300px;
+	}
 	section {
 		max-width: 99vw;
 	}
