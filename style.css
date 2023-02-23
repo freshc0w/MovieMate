@@ -65,49 +65,9 @@ section {
 	margin-right: auto;
 	padding: 0.65rem;
 	margin-bottom: 1rem;
-
-	border: 0.3rem solid transparent;
 	border-radius: 2rem;
 
-	border-image: conic-gradient(
-			from var(--angle),
-			var(--default-background-color) 0deg 90deg,
-			whitesmoke 174deg 175deg,
-			var(--default-background-color) 180deg 270deg,
-			whitesmoke 354deg 355deg
-		)
-		1 stretch;
-	animation: rotate 16s linear infinite, opacityChange 16s infinite alternate;
-}
-
-/*
-For border animations
-*/
-/* Animations */
-@supports (background: paint(houdini)) {
-	@property --opacity {
-		syntax: "<number>";
-		initial-value: 0.5;
-		inherits: false;
-	}
-
-	@property --angle {
-		syntax: "<angle>";
-		initial-value: 0deg;
-		inherits: false;
-	}
-
-	@keyframes opacityChange {
-		to {
-			--opacity: 0.75;
-		}
-	}
-
-	@keyframes rotate {
-		to {
-			--angle: 360deg;
-		}
-	}
+	border: 0.1rem solid rgb(2, 2, 2);
 }
 
 section > div {
@@ -122,12 +82,7 @@ section > div {
 	margin-right: -1.5rem;
 	z-index: 1;
 }
-@media screen and (max-width: 1000px) {
-}
-.intro-sub-info,
-.synopsis-watch-providers {
-	margin-top: 1.5vw;
-}
+
 
 .sub-info {
 	margin-bottom: 0.25rem;
@@ -523,6 +478,12 @@ Movie/TvShow recommendation styling
 	.synopsis-watch-providers {
 		margin-left: 0;
 	}
+}
+@media screen and (max-width: 1000px) {
+}
+.intro-sub-info,
+.synopsis-watch-providers {
+	margin-top: 1.5vw;
 }
 @media screen and (max-width: 775px) {
 	.poster {
