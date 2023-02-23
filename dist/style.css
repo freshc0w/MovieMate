@@ -83,7 +83,6 @@ section > div {
 	z-index: 1;
 }
 
-
 .sub-info {
 	margin-bottom: 0.25rem;
 	display: flex;
@@ -96,11 +95,11 @@ section > div {
 	padding-left: 0.5rem;
 	place-self: start;
 	padding-top: 4rem;
-	border: 0.75px whitesmoke solid;
 	border-radius: 10%;
 	margin-left: -1rem;
 	min-width: 100%;
 	margin-right: 1.5vw;
+	box-shadow: 0 0 28px rgba(255, 255, 255, 0.1);
 
 	/* For lighter background color fill */
 	min-height: 100%;
@@ -140,16 +139,36 @@ Information intro styling
 }
 .summary {
 	text-align: justify;
-    font-size: 1.3rem;
+	font-size: 1.3rem;
 }
-
-/*
-sub-info styling
-*/
 
 /*
 Watch provider styling
 */
+.country-btn {
+	padding: 0.75rem 2rem;
+	background-color: var(--default-background-color);
+	color: whitesmoke;
+	border-radius: 0.5rem;
+	font-size: 1.3rem;
+	border: 1px solid rgba(151, 151, 151, 0.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 200px;
+	gap: 10px;
+	margin-left: 2%;
+	max-height: 50px;
+	overflow: hidden;
+}
+.lost-providers {
+	width:auto;
+}
+.fa-angle-down {
+	color: rgb(151, 151, 151);
+	font-size: 1.25rem;
+	margin-left: auto;
+}
 .provider-service-container {
 	margin-bottom: 5px;
 	display: grid;
@@ -158,11 +177,14 @@ Watch provider styling
 	align-items: start;
 	gap: max(1vw, 0.25rem);
 }
+.service-name-bold {
+	margin-top: 1rem;
+}
 .synopsis-watch-providers > h2 {
 	font-size: 1.6rem;
 }
-.lost-gif{
-    width: 70%;
+.lost-gif {
+	width: 40%;
 }
 .provider-img {
 	border-radius: 1rem;
@@ -189,7 +211,9 @@ Watch provider styling
 	box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
 	transform: rotate(360deg);
 }
-
+.house-provider-container {
+	padding: 0.5rem;
+}
 /*
 Countries modal styling.
 */
@@ -197,6 +221,7 @@ Countries modal styling.
 	--width: min(600px, 80vw);
 	--height: 80vh;
 	position: fixed;
+	z-index: 2;
 	width: var(--width);
 	height: var(--height);
 	top: 50%;
@@ -211,6 +236,10 @@ Countries modal styling.
 	border-radius: 1rem;
 	border: 1px solid whitesmoke;
 	box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+	transform: translateY(-125%);
+	transition: visibility 0s, opacity 0.5s linear, transform 0.5s linear;
+	visibility: hidden;
+	opacity: 0;
 }
 .modal-header {
 	text-align: center;
@@ -286,6 +315,9 @@ Countries modal styling.
 .country-flag {
 	width: 10%;
 	object-fit: contain;
+}
+.btn-country-flag {
+	width: 25px;
 }
 .fa-check {
 	margin-left: auto;
@@ -366,7 +398,7 @@ Trailer Styling for video responsiveness.
 */
 .trailer-container {
 	grid-column: 1 / -1;
-	width: 70%;
+	width: 60%;
 	text-align: center;
 }
 .video-wrapper {
@@ -534,13 +566,12 @@ Movie/TvShow recommendation styling
 		min-width: 70%;
 		max-width: 70%;
 	}
-    .lost-gif {
-        width: 85%;
-    }
+	.lost-gif {
+		width: 45%;
+	}
 }
 
 @media screen and (max-width: 670px) {
-	/* stop animation */
 	section {
 		border: 0;
 	}
@@ -556,5 +587,47 @@ Movie/TvShow recommendation styling
 	.trailer-container {
 		width: 90%;
 	}
-
 }
+
+@media screen and (max-width: 620px) {
+	section {
+		max-width: 99vw;
+	}
+	.intro-sub-info {
+		grid-column: 1 / -1;
+	}
+	.synopsis-watch-providers {
+		grid-column: 1 / -1;
+		box-shadow: 0 0 2px whitesmoke;
+		border-radius: 0.2rem;
+	}
+	.poster {
+		width: 350px;
+		margin-left: 0;
+		box-shadow: 0 0 2px whitesmoke;
+	}
+	.sub-info {
+		font-size: 1.1rem;
+	}
+	.review-title {
+		margin-top: 1rem;
+	}
+	.review-content {
+		-webkit-line-clamp: 5;
+		font-size: .9rem;
+	}
+	.rec-container {
+		font-size: .85rem;
+	}
+	.summary {
+		font-size: 1.2rem;
+	}
+	.service-name-bold,
+	.synopsis-watch-providers > h2 {
+		font-size: 1.3rem
+	}
+	.review-container > * {
+		margin-bottom: .75rem;
+	}
+}
+

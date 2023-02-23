@@ -24,7 +24,7 @@ const drawSection = async (id, media) => {
 	const trailer = await getInfo(id, movie.fetchMovieTrailer, tv.fetchTvTrailer);
 	const reviews = await getInfo(id, movie.fetchMovieReviews, tv.fetchTvReviews);
 
-	section.classList.add('section-container');
+	section.classList.add("section-container");
 	function drawAll() {
 		addToSection(drawIntro());
 	}
@@ -165,10 +165,10 @@ const drawSection = async (id, media) => {
 	};
 
 	const drawSummaryHeading = () => {
-		const heading = document.createElement('h2');
-		heading.textContent = "Synopsis: "
+		const heading = document.createElement("h2");
+		heading.textContent = "Synopsis: ";
 		return heading;
-	}
+	};
 	const drawSummary = () => {
 		const para = document.createElement("p");
 		para.textContent = details.summary;
@@ -192,10 +192,28 @@ const drawSection = async (id, media) => {
 		if (Object.keys(providers).length) {
 			availProviders = true;
 			if (Object.keys(providers).includes("Australia")) {
+				// Draw Aus flag in btn.
+				const flag = renderElement("img", "country-flag");
+				flag.setAttribute("crossorigin", "anonymous");
+				flag.src = `https://countryflagsapi.com/png/Australia`;
+				flag.alt = `Australia flag`;
+				flag.classList.add("btn-country-flag");
 				drawProvider("Australia");
 				countryBtn.textContent = "Australia";
+				countryBtn.appendChild(flag);
 			} else {
+				// Draw first country's flag in btn.
 				const firstProvider = Object.keys(providers)[0];
+				try {
+					const flag = renderElement("img", "country-flag");
+					flag.setAttribute("crossorigin", "anonymous");
+					flag.src = `https://countryflagsapi.com/png/${firstProvider}`;
+					flag.alt = `${firstProvider} flag`;
+					flag.classList.add("btn-country-flag");
+					countryBtn.appendChild(flag);
+				} catch (err) {
+					console.log(err);
+				}
 				drawProvider(firstProvider);
 				countryBtn.textContent = `${firstProvider}`;
 			}
@@ -203,13 +221,18 @@ const drawSection = async (id, media) => {
 			availProviders = false;
 			countryBtn.textContent =
 				"No countries offer this tv/movie at the moment.";
+			countryBtn.classList.add("lost-providers");
 			const lostGif = renderElement("img", "lost-gif");
-			lostGif.src = './img/lost-gif.gif';
-			lostGif.alt = "Prover cannot be found picture."
+			lostGif.src = "./img/lost-gif.gif";
+			lostGif.alt = "Prover cannot be found picture.";
 			houseContainer.style.display = "flex";
 			houseContainer.style.justifyContent = "center";
 			houseContainer.appendChild(lostGif);
 		}
+		// render down arrow.
+		const downArrow = renderElement("i", "fas");
+		downArrow.classList.add("fa-angle-down");
+		countryBtn.appendChild(downArrow);
 
 		// availProviders ? renderCountriesModal(countryBtn.textContent) : ""; // temp
 		// Add btn event click listener to open modal
@@ -243,6 +266,21 @@ const drawSection = async (id, media) => {
 		function drawProvider(countryName = "Australia") {
 			// Change text of btn to countryName
 			countryBtn.textContent = countryName;
+
+			// Add arrows and flags into btn after every selection.
+			try {
+				const flag = renderElement("img", "country-flag");
+				flag.setAttribute("crossorigin", "anonymous");
+				flag.src = `https://countryflagsapi.com/png/${countryName}`;
+				flag.alt = `${countryName} flag`;
+				flag.classList.add("btn-country-flag");
+				countryBtn.appendChild(flag);
+			} catch (err) {
+				console.log(err);
+			}
+			const downArrow = renderElement("i", "fas");
+			downArrow.classList.add("fa-angle-down");
+			countryBtn.appendChild(downArrow);
 
 			const streamInfo = providers[countryName].stream;
 			const buyInfo = providers[countryName].buy;
@@ -374,7 +412,7 @@ const drawSection = async (id, media) => {
 
 			// Reviews out of 10
 			if (info === review.rating) {
-				infoContainer.textContent = `${info}/10`;
+				infoContainer.textContent = review.rating ? `${info}/10` : "0/10";
 			}
 			container.appendChild(infoContainer);
 		}
@@ -425,12 +463,13 @@ const drawSection = async (id, media) => {
 	};
 	const drawRecs = () => {
 		const recsContainer = renderElement("div", "recs-container");
-		if (!recs) {
-			const noneMsg = renderElement('h4', 'no-review-msg');
-			noneMsg.textContent = "No recommendations found";
+		if (Object.keys(recs).length === 0) {
+			const noneMsg = renderElement("h4", "no-review-msg");
+			noneMsg.textContent = "No recommendations found.";
 			recsContainer.appendChild(noneMsg);
+			recsContainer.style = "display: flex; justify-content: center;"
 			return recsContainer;
-		};
+		}
 		for (let rec in recs) {
 			recsContainer.appendChild(drawRec(recs[rec]));
 		}
@@ -586,8 +625,19 @@ const drawSection = async (id, media) => {
 			modalCloseBtn.addEventListener("click", (e) => {
 				e.preventDefault();
 				const currentForm = document.querySelector(".modal-country-container");
-				currentForm.remove();
 				document.querySelector(".face-mask").style.display = "none";
+
+				setTimeout(setInvisible, 100);
+				function setInvisible() {
+					currentForm.style.transform = "translateY(-125%)";
+				}
+				setTimeout(removeModal, 750);
+				function removeModal() {
+					currentForm.style.opacity = 0;
+					currentForm.style.visibility = "hidden";
+					currentForm.remove();
+				}
+				// currentForm.remove();
 			});
 		};
 
@@ -599,6 +649,14 @@ const drawSection = async (id, media) => {
 		[modalHeader, modalBody, modalCloseBtn].forEach((modalElem) =>
 			modalContainer.appendChild(modalElem)
 		);
+
+		setTimeout(makeVisible, 100);
+		function makeVisible() {
+			// Set styling to visible for animation fade in effect.
+			modalContainer.style.visibility = "visible";
+			modalContainer.style.opacity = 1;
+			modalContainer.style.transform = "translateY(0%)";
+		}
 
 		const bodyDocument = document.querySelector("body");
 		bodyDocument.append(modalContainer);
