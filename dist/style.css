@@ -56,12 +56,22 @@ a {
 /* 
 Search Bar styling
 */
+.search-bar-wrapper {
+	position: fixed;
+	z-index: 2;
+	width: 100svw;
+	display: flex;
+	justify-content: center;
+	background-color: var(--default-background-color);
+}
 .search-bar {
+	left: 25%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 1rem;
 	text-align: center;
+
 }
 .search {
 	font-size: 1.25rem;
@@ -123,9 +133,9 @@ Search Bar styling
 	/* animation: rotate 2.5s linear infinite, opacityChange 2.5s infinite alternate; */
 	border-image: conic-gradient(
         from var(--angle),
-        black 0deg 175deg,
+        var(--default-background-color) 0deg 175deg,
         #a2fdf9 175deg 180deg,
-		black 180deg 355deg,
+		var(--default-background-color) 180deg 355deg,
       #a2fdf9 355deg 360deg
     )
     1 stretch;
@@ -159,6 +169,10 @@ section {
 	border-radius: 2rem;
 
 	border: 0.1rem solid rgb(2, 2, 2);
+}
+
+section:first-child {
+	margin-top: 3rem;
 }
 
 section > div {
