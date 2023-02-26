@@ -39,6 +39,7 @@ a {
 
 .face-mask {
 	display: none;
+	z-index: 1;
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -63,6 +64,8 @@ Search Bar styling
 	display: flex;
 	justify-content: center;
 	background-color: var(--default-background-color);
+	opacity: 0.85;
+	backdrop-filter: blur(4px);
 }
 .search-bar {
 	left: 25%;
@@ -151,6 +154,13 @@ Search Bar styling
 	color: rgb(2, 206, 206);
 	background: transparent;
 	font-size: 1.3rem;
+}
+
+.check-animation-wrapper {
+	position: absolute;
+	right: 5%;
+	display: flex;
+	gap: 10px;
 }
 
 /* 
@@ -749,3 +759,23 @@ Movie/TvShow recommendation styling
 	}
 }
 
+
+/*
+For scroll animations 
+*/
+.hidden {
+	opacity: 0;
+	filter: blur(5px);
+	transform: translateX(-100%);
+	transition: transform 0.25s, filter 0.25s;
+}
+@media(prefers-reduced-motion) {
+	.hidden {
+		transition: none;
+	}
+}
+.show {
+	opacity: 1;
+	filter: blur(0);
+	transform: translateX(0);
+}
