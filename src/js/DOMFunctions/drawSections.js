@@ -6,6 +6,8 @@ import { drawSection } from "./drawSection";
 async function drawSections(title) {
 	const ids = await fetchIds(title);
 	const main = document.querySelector(".main-container");
+	showLoader();
+
 	let sections = [];
 
 	// Make an arr w/ elems of [id, media]
@@ -24,14 +26,17 @@ async function drawSections(title) {
 	});
 	// draw all sections
 	sections.forEach(async (section) => {
-		await renderSection(section[0], section[1]);
+		await renderSection(section[0], section[1]).then(() => hideLoader());
 
-		// Enable animation.
-		const elements = document.getElementsByTagName("div");
-		[...elements].forEach((el) => {
-			el.classList.add("hidden");
-			observer.observe(el);
-		});
+		// Enable animation if animation-check checkbox is checked.
+		const animationCheck = document.getElementById("check-animation");
+		if (animationCheck.checked) {
+			const elements = document.getElementsByTagName("div");
+			[...elements].forEach((el) => {
+				el.classList.add("hidden");
+				observer.observe(el);
+			});
+		}
 	});
 
 	async function renderSection(id, media) {
@@ -53,10 +58,6 @@ async function drawSections(title) {
 		recHeading.classList.add("rec-heading");
 		recHeading.textContent = "RECOMMENDATIONS:";
 
-		// section.addToSection(section.drawIntro("300"));
-		// section.addToSection(section.drawSubInfos());
-		// section.addToSection(section.drawSummary());
-		// section.addToSection(section.drawProviders());
 		section.addToSection(introSubInfo);
 		section.addToSection(synopsisWatchPvders);
 		section.addToSection(section.drawReviews());
@@ -69,7 +70,20 @@ async function drawSections(title) {
 
 function clearSections() {
 	const main = document.querySelector(".main-container");
-	main.innerHTML = "";
+	const loader = document.querySelector(".loader");
+	const sections = main.getElementsByTagName('section');
+	[...sections].forEach(sect => sect.remove());
+}
+
+function showLoader() {
+	const loader = document.querySelector(".loader");
+	loader.style.visibility = "visible";
+}
+function hideLoader() {
+	const loader = document.querySelector(".loader");
+
+	loader.style.visibility = "hidden";
+
 }
 
 export { drawSections, clearSections };

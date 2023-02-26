@@ -32,7 +32,7 @@ async function fetchIds(name) {
 			console.log(ids);
 			return ids;
 		} else {
-			console.log(`No results found for ${name}`);
+			alert(`No results found for "${name}".\nPlease check your spelling.`);
 			return;
 		}
 	} catch (err) {

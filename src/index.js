@@ -7,8 +7,8 @@ initialisePage();
 function initialisePage() {
     addSubmitSearchFnc();
     addToggleAnimationFnc();
+    // drawSections("Game Of Thrones");
 }
 
 
 
-// drawSections("pee mak");
