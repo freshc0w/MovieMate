@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title>MovieMate</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
-    rel="stylesheet">
-    <script
-    src="https://kit.fontawesome.com/4c536a6bd5.js"
-    crossorigin="anonymous"
-  ></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/4c536a6bd5.js" crossorigin="anonymous"></script>
     <script defer src="main.js"></script>
 </head>
+
 <body>
     <div class="face-mask"></div>
     <div class="search-bar-wrapper">
-        <form class = "search-bar" action="">
+        <form class="search-bar" action="">
             <label class="search" for="input-search">Search for your favourite TV show or Movie: </label>
             <div class="search-wrapper">
                 <input id="input-search" type="search" name="Search" placeholder="E.g... Game Of Thrones">
@@ -29,8 +27,17 @@
             <input id="check-animation" type="checkbox" checked>
         </div>
     </div>
-    <div class="main-container"></div>
+    <div class="main-container">
+    </div>
+    <div class="loader">
+        <div class="orbe" style="--index: 0"></div>
+        <div class="orbe" style="--index: 1"></div>
+        <div class="orbe" style="--index: 2"></div>
+        <div class="orbe" style="--index: 3"></div>
+        <div class="orbe" style="--index: 4"></div>
+    </div>
 
 
 </body>
+
 </html>

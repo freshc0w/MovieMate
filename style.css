@@ -18,6 +18,7 @@ html {
 body {
 	position: relative;
 	overflow-x: hidden;
+	min-height: 100svh;
 	font-family: var(--default-font);
 	background-color: var(--darker-background-color);
 	color: whitesmoke;
@@ -53,7 +54,6 @@ a {
 	background-color: rgba(0, 0, 0, 0.45);
 }
 
-
 /* 
 Search Bar styling
 */
@@ -76,7 +76,6 @@ Search Bar styling
 	align-items: center;
 	gap: 1rem;
 	text-align: center;
-
 }
 .search {
 	font-size: 1.25rem;
@@ -95,39 +94,38 @@ Search Bar styling
 
 	border: 0.2rem solid #a2fdf9;
 
-    /* Paint an image in the border */
-    background: rgb(255, 255, 255 / var(--opacity));
+	/* Paint an image in the border */
+	background: rgb(255, 255, 255 / var(--opacity));
 	animation: rotate 4s linear infinite, opacityChange 4s infinite alternate;
 	/* animation-iteration-count: 1; */
-    border-radius: 0.5rem;
+	border-radius: 0.5rem;
 }
 /* Animations */
 @supports (background: paint(houdini)) {
-     @property --opacity {
-      syntax: "<number>";
-      initial-value: 0.5;
-      inherits: false;
-    } 
-  
-     @property --angle {
-      syntax: "<angle>";
-      initial-value: 0deg;
-      inherits: false;
-    } 
-  
-    @keyframes opacityChange {
-      to {
-        --opacity: .75;
-      }
-    }
-  
-    @keyframes rotate {
-      to {
-        --angle: 360deg;
-      }
-    }
-}
+	@property --opacity {
+		syntax: "<number>";
+		initial-value: 0.5;
+		inherits: false;
+	}
 
+	@property --angle {
+		syntax: "<angle>";
+		initial-value: 0deg;
+		inherits: false;
+	}
+
+	@keyframes opacityChange {
+		to {
+			--opacity: 0.75;
+		}
+	}
+
+	@keyframes rotate {
+		to {
+			--angle: 360deg;
+		}
+	}
+}
 
 #input-search:focus {
 	outline: 0;
@@ -137,13 +135,13 @@ Search Bar styling
 	border: 0.25rem solid transparent;
 	/* animation: rotate 2.5s linear infinite, opacityChange 2.5s infinite alternate; */
 	border-image: conic-gradient(
-        from var(--angle),
-        var(--default-background-color) 0deg 175deg,
-        #a2fdf9 175deg 180deg,
-		var(--default-background-color) 180deg 355deg,
-      #a2fdf9 355deg 360deg
-    )
-    1 stretch;
+			from var(--angle),
+			var(--default-background-color) 0deg 175deg,
+			#a2fdf9 175deg 180deg,
+			var(--default-background-color) 180deg 355deg,
+			#a2fdf9 355deg 360deg
+		)
+		1 stretch;
 }
 .saerch-wrapper {
 	display: flex;
@@ -251,9 +249,9 @@ Information intro styling
 	text-align: center;
 }
 .title {
-	font-family: "Times New Roman", Times, serif;
-	font-size: clamp(2rem, 3vw, 2.5rem);
-	font-weight: 900;
+	font-family: "Montserrat", sans-serif;
+	font-size: clamp(1.8rem, 3vw, 2.3rem);
+	font-weight: 1000;
 }
 .poster {
 	width: 300px;
@@ -286,7 +284,7 @@ Watch provider styling
 	overflow: hidden;
 }
 .lost-providers {
-	width:auto;
+	width: auto;
 }
 .fa-angle-down {
 	color: rgb(151, 151, 151);
@@ -361,7 +359,7 @@ Countries modal styling.
 	border: 1px solid whitesmoke;
 	box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
 	transform: translateY(-125%);
-	transition: visibility 0s, opacity 0.5s linear, transform 0.5s linear;
+	transition: visibility 0s, opacity 0.4s ease-in-out, transform 0.4s ease-out;
 	visibility: hidden;
 	opacity: 0;
 }
@@ -611,6 +609,57 @@ Movie/TvShow recommendation styling
 }
 
 /*
+Loader animations
+*/
+.loader {
+	visibility: hidden;
+	position: absolute;
+	top: 47.5%;
+	left: 47.5%;
+	/* visibility: hidden; */
+	--size-loader: 50px;
+	--size-orbe: 10px;
+	width: var(--size-loader);
+	height: var(--size-loader);
+	/* position: relative; */
+	transform: rotate(45deg);
+}
+
+.orbe {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	--delay: calc(var(--index) * 0.1s);
+	animation: orbit-around ease-in-out 1.5s var(--delay) infinite;
+	opacity: calc(1 - calc(0.2 * var(--index)));
+}
+
+.orbe::after {
+	position: absolute;
+	content: "";
+	top: 0;
+	left: 0;
+	width: var(--size-orbe);
+	height: var(--size-orbe);
+	background-color: #3ae374;
+	box-shadow: 0px 0px 20px 2px #3ae374;
+	border-radius: 50%;
+}
+
+@keyframes orbit-around {
+	0% {
+	}
+
+	80% {
+		transform: rotate(360deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/*
 Media breakpoints
 */
 @media screen and (max-width: 1550px) {
@@ -639,7 +688,7 @@ Media breakpoints
 @media screen and (max-width: 1000px) {
 	.search-bar {
 		flex-direction: column;
-		gap: .2rem;
+		gap: 0.2rem;
 	}
 	.intro-sub-info,
 	.synopsis-watch-providers {
@@ -762,23 +811,22 @@ Media breakpoints
 	}
 	.review-content {
 		-webkit-line-clamp: 5;
-		font-size: .9rem;
+		font-size: 0.9rem;
 	}
 	.rec-container {
-		font-size: .85rem;
+		font-size: 0.85rem;
 	}
 	.summary {
 		font-size: 1.2rem;
 	}
 	.service-name-bold,
 	.synopsis-watch-providers > h2 {
-		font-size: 1.3rem
+		font-size: 1.3rem;
 	}
 	.review-container > * {
-		margin-bottom: .75rem;
+		margin-bottom: 0.75rem;
 	}
 }
-
 
 /*
 For scroll animations 
@@ -786,15 +834,24 @@ For scroll animations
 .hidden {
 	opacity: 0;
 	filter: blur(5px);
-	transform: translateX(-100%);
-	transition: transform 0.25s, filter 0.25s;
+	transform: translateX(-50%);
+	transition: transform 0.25s, filter 0.5s;
 }
-@media(prefers-reduced-motion) {
+.hidden:nth-child(2) {
+	transform: translateX(50%);
+	transition: transform 0.25s, filter 0.5s;
+}
+@media (prefers-reduced-motion) {
 	.hidden {
 		transition: none;
 	}
 }
 .show {
+	opacity: 1;
+	filter: blur(0);
+	transform: translateX(0);
+}
+.show:nth-child(2) {
 	opacity: 1;
 	filter: blur(0);
 	transform: translateX(0);
