@@ -10,37 +10,49 @@ async function drawSections(title) {
 
 	// Make an arr w/ elems of [id, media]
 	for (let id in ids) {
-
-		sections.push([id, ids[id]])
+		sections.push([id, ids[id]]);
 	}
 
-	
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add("show");
+			} else {
+				return;
+			}
+		});
+	});
 	// draw all sections
-	sections.forEach(
-		async (section) => await renderSection(section[0], section[1])
-		);
-		
-	
+	sections.forEach(async (section) => {
+		await renderSection(section[0], section[1]);
+
+		// Enable animation.
+		const elements = document.getElementsByTagName("div");
+		[...elements].forEach((el) => {
+			el.classList.add("hidden");
+			observer.observe(el);
+		});
+	});
+
 	async function renderSection(id, media) {
 		const section = await drawSection(id, media);
 
-
 		// Add wrapper divs for layout.
-		const introSubInfo = document.createElement('div');
+		const introSubInfo = document.createElement("div");
 		introSubInfo.classList.add("intro-sub-info");
 		introSubInfo.appendChild(section.drawIntro("300"));
 		introSubInfo.appendChild(section.drawSubInfos());
-		
-		const synopsisWatchPvders = document.createElement('div');
+
+		const synopsisWatchPvders = document.createElement("div");
 		synopsisWatchPvders.classList.add("synopsis-watch-providers");
 		synopsisWatchPvders.appendChild(section.drawSummaryHeading());
 		synopsisWatchPvders.appendChild(section.drawSummary());
-		synopsisWatchPvders.appendChild(section.drawProviders()); 
-		
-		const recHeading = document.createElement('h2');
-		recHeading.classList.add('rec-heading');
-		recHeading.textContent = 'RECOMMENDATIONS:'
-		
+		synopsisWatchPvders.appendChild(section.drawProviders());
+
+		const recHeading = document.createElement("h2");
+		recHeading.classList.add("rec-heading");
+		recHeading.textContent = "RECOMMENDATIONS:";
+
 		// section.addToSection(section.drawIntro("300"));
 		// section.addToSection(section.drawSubInfos());
 		// section.addToSection(section.drawSummary());
@@ -54,8 +66,6 @@ async function drawSections(title) {
 		main.appendChild(section.section);
 	}
 }
-
-
 
 function clearSections() {
 	const main = document.querySelector(".main-container");
