@@ -148,6 +148,7 @@ Search Bar styling
 	align-items: center;
 }
 .search-query {
+	overflow: visible;
 	border-radius: 50%;
 	width: 25px;
 	height: 25px;
@@ -694,6 +695,9 @@ Media breakpoints
 	.synopsis-watch-providers {
 		margin-top: 1.5vw;
 	}
+	section:first-child {
+		margin-top: 10%;
+	}
 }
 @media screen and (max-width: 850px) {
 	.poster {
@@ -784,11 +788,11 @@ Media breakpoints
 	#input-search {
 		width: 300px;
 	}
-	.saerch-wrapper {
-		width: 300px;
-	}
 	section {
 		max-width: 99vw;
+	}
+	section:first-child {
+		margin-top: 25%;
 	}
 	.intro-sub-info {
 		grid-column: 1 / -1;
