@@ -63,9 +63,11 @@ Search Bar styling
 	width: 100svw;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	background-color: var(--default-background-color);
 	opacity: 0.85;
 	backdrop-filter: blur(4px);
+	padding: 0.25rem;
 }
 .search-bar {
 	left: 25%;
@@ -157,10 +159,17 @@ Search Bar styling
 }
 
 .check-animation-wrapper {
-	position: absolute;
-	right: 5%;
 	display: flex;
-	gap: 10px;
+	align-items: center;
+	position: absolute;
+	top: 1.2rem;
+	right: 4%;
+	gap: 0.75rem;
+	justify-self: flex-end;
+}
+.check-animation-wrapper > *:hover {
+	transform: scale(1.1);
+	cursor: pointer;
 }
 
 /* 
@@ -601,20 +610,18 @@ Movie/TvShow recommendation styling
 	grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 }
 
-@media screen and (max-width: 850px) {
-	.poster {
-		width: 225px;
-	}
-
-	.summary {
-		font-size: 0.9rem;
-	}
-	.synopsis-watch-providers {
-		margin-right: 0;
+/*
+Media breakpoints
+*/
+@media screen and (max-width: 1550px) {
+	.check-animation-wrapper {
+		position: static;
 	}
 }
-
 @media screen and (max-width: 1400px) {
+	.search-bar-wrapper {
+		flex-direction: column;
+	}
 	#input-search {
 		width: 400px;
 	}
@@ -639,6 +646,19 @@ Movie/TvShow recommendation styling
 		margin-top: 1.5vw;
 	}
 }
+@media screen and (max-width: 850px) {
+	.poster {
+		width: 225px;
+	}
+
+	.summary {
+		font-size: 0.9rem;
+	}
+	.synopsis-watch-providers {
+		margin-right: 0;
+	}
+}
+
 @media screen and (max-width: 775px) {
 	.poster {
 		width: 175px;

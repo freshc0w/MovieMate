@@ -412,7 +412,7 @@ const drawSection = async (id, media) => {
 
 			// Reviews out of 10
 			if (info === review.rating) {
-				infoContainer.textContent = review.rating ? `${info}/10` : "0/10";
+				infoContainer.textContent = review.rating ? `${info}/10` : "Rating not provided..";
 			}
 			container.appendChild(infoContainer);
 		}

@@ -18,11 +18,9 @@ export default function addToggleAnimationFnc() {
 			elements.forEach((el) => {
 				el.classList.add("hidden");
 				observer.observe(el);
-				console.log("bye");
 			});
 		} else {
 			elements.forEach((el) => {
-				console.log("hi");
 				el.classList.remove("hidden");
 				observer.disconnect();
 			});
