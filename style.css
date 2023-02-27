@@ -767,6 +767,9 @@ Media breakpoints
 }
 
 @media screen and (max-width: 670px) {
+	* {
+		overflow-x: hidden;
+	}
 	section {
 		border: 0;
 	}
@@ -781,6 +784,9 @@ Media breakpoints
 	}
 	.trailer-container {
 		width: 90%;
+	}
+	.modal-list-countries > * {
+		overflow: hidden;
 	}
 }
 
