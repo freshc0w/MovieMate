@@ -500,6 +500,8 @@ Reviews styling
 .review-footer {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 2%;
+	margin-top: 1%;
 }
 .review-updated {
 	text-align: end;
@@ -514,6 +516,10 @@ Reviews styling
 .review-container {
 	grid-column: 1 / -1;
 	padding: 1.5vw 2.5vw;
+}
+.review-rating {
+	font-weight: 850;
+	text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
 }
 
 /*
@@ -694,6 +700,9 @@ Media breakpoints
 	.intro-sub-info,
 	.synopsis-watch-providers {
 		margin-top: 1.5vw;
+	}
+	.sub-info-container {
+		width: 90%;
 	}
 	section:first-child {
 		margin-top: 10%;
