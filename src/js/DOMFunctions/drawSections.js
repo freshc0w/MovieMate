@@ -39,7 +39,7 @@ async function drawSections(title) {
 		}
 	});
 
-	document.getElementById("input-search").value = title;
+	document.getElementById("input-search").value = title.split("+").join(" ");
 
 	async function renderSection(id, media) {
 		const section = await drawSection(id, media);
