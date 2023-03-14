@@ -24,6 +24,7 @@ body {
 	color: whitesmoke;
 }
 
+
 #title-page {
 	--width: 670px;
 	width: var(--width);
@@ -53,10 +54,10 @@ body {
 	text-shadow: 0 0 10px rgba(0, 255, 255, 0.7)
 }
 .intro-container2 {
-	width: 650px;
+	--width: 650px;
+	width: var(--width);
 	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
+	margin-left: calc(50% - var(--width) /2 );
 }
 
 body {
@@ -760,6 +761,19 @@ Media breakpoints
 }
 
 @media screen and (max-width: 775px) {
+	#title-page,
+	.intro-container2 {
+		--width: 400px;
+	}
+	#title-page {
+		height: 110%;
+	}
+	#title-page h1 {
+		font-size: 70px;
+	}
+	.intro-container2 {
+		font-size: clamp(0.7rem, 3.5vw, 2rem);
+	}
 	.poster {
 		width: 175px;
 	}
@@ -882,6 +896,12 @@ Media breakpoints
 	}
 	.review-container > * {
 		margin-bottom: 0.75rem;
+	}
+}
+
+@media screen and (max-width: 550px) {
+	section:first-child {
+		margin-top: 35%;
 	}
 }
 
