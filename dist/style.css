@@ -933,3 +933,30 @@ For scroll animations
 	filter: blur(0);
 	transform: translateX(0);
 }
+
+  /* Footer */
+  footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100vw;
+	padding: 0.25rem;
+	background-color: rgba(10, 10, 10, 1);
+	color: whitesmoke;
+	font-size: 0.75rem;
+	font-family: 'Montserrat', sans-serif;
+  }
+  .fa-github {
+  color: whitesmoke;
+  font-size: 22px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.fa-github:hover {
+  transform: rotate(360deg) scale(1.2);
+}
