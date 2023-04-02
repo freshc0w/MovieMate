@@ -30,7 +30,7 @@ body {
 	position: relative;
 	display: inline-block;
 	margin-top: 35vh;
-	margin-left: calc(50% - var(--width) /2 );
+	margin-left: calc(50% - var(--width) / 2);
 }
 #title-page video {
 	width: 100%;
@@ -38,7 +38,7 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
-	object-fit:cover;
+	object-fit: cover;
 	/* z-index: -1; */
 }
 .title-name {
@@ -46,23 +46,23 @@ body {
 	height: 100%;
 	font-size: 120px;
 	color: rgba(255, 255, 255, 0.7);
-	background-color: var(--darker-background-color); 
+	background-color: var(--darker-background-color);
 	background-color: black;
 	mix-blend-mode: multiply;
 	/* text-shadow: 0 0 10px white, 0 0 20px rgba(0, 0, 0, 0.45), 0 0 30px rgba(240, 240, 240, 0.5); */
-	text-shadow: 0 0 10px rgba(0, 255, 255, 0.7)
+	text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
 }
 .intro-container2 {
 	--width: 650px;
 	width: var(--width);
 	text-align: center;
-	margin-left: calc(50% - var(--width) /2 );
+	margin-left: calc(50% - var(--width) / 2);
 }
 
 body {
 	background-color: black;
 }
-	
+
 .main-container,
 form {
 	padding: 10px;
@@ -580,20 +580,24 @@ Trailer Styling for video responsiveness.
 
 @keyframes radiate-border {
 	0% {
-		box-shadow: 0 0 4px rgba(0, 255, 255, 0.7), 0 0 8px rgba(0, 255, 255, 0.6);
+		box-shadow: 0 0 4px rgba(0, 255, 255, 0.7),
+			0 0 8px rgba(0, 255, 255, 0.6);
 	}
 	25% {
-		box-shadow: 0 0 4px rgba(255, 0, 255, 0.7), 0 0 8px rgba(255, 0, 255, 0.6);
+		box-shadow: 0 0 4px rgba(255, 0, 255, 0.7),
+			0 0 8px rgba(255, 0, 255, 0.6);
 	}
 	50% {
 		box-shadow: 0 0 4px rgba(255, 255, 255, 0.7),
 			0 0 8px rgba(255, 255, 255, 0.6);
 	}
 	75% {
-		box-shadow: 0 0 4px rgba(255, 255, 0, 0.7), 0 0 8px rgba(255, 255, 0, 0.6);
+		box-shadow: 0 0 4px rgba(255, 255, 0, 0.7),
+			0 0 8px rgba(255, 255, 0, 0.6);
 	}
 	100% {
-		box-shadow: 0 0 4px rgba(0, 255, 100, 0.7), 0 0 8px rgba(0, 255, 100, 0.6);
+		box-shadow: 0 0 4px rgba(0, 255, 100, 0.7),
+			0 0 8px rgba(0, 255, 100, 0.6);
 	}
 }
 .trailer-heading {
@@ -933,8 +937,8 @@ For scroll animations
 	transform: translateX(0);
 }
 
-  /* Footer */
-  footer {
+/* Footer */
+footer {
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -947,15 +951,15 @@ For scroll animations
 	background-color: rgba(10, 10, 10, 1);
 	color: whitesmoke;
 	font-size: 0.75rem;
-	font-family: 'Montserrat', sans-serif;
-  }
-  .fa-github {
-  color: whitesmoke;
-  font-size: 22px;
-  transition: transform 0.3s ease-in-out;
-  cursor: pointer;
+	font-family: "Montserrat", sans-serif;
+}
+.fa-github {
+	color: whitesmoke;
+	font-size: 22px;
+	transition: transform 0.3s ease-in-out;
+	cursor: pointer;
 }
 
 .fa-github:hover {
-  transform: rotate(360deg) scale(1.2);
+	transform: rotate(360deg) scale(1.2);
 }
