@@ -2,98 +2,154 @@ import * as movie from "../apiFunctions/fetchMovieInfo";
 import * as tv from "../apiFunctions/fetchTvInfo";
 import * as page from "./drawSections";
 
-/*
-Draw an individual section based on user input query.
-This section will consts of the overall movie/tv's 
-    - Details,
-    - The watch providers based on specific countries
-    - Available trailers,
-    - Other recommendations.
-    - Reviews by established authors based from random sources.
-*/
-
+/**
+ * Draw an individual section based on user input query.
+ * This section will consts of the overall movie/tv's
+ * 	- Details,
+ * 	- The watch providers based on specific countries
+ * 	- Available trailers,
+ * 	- Other recommendations.
+ * 	- Reviews by established authors based from random sources.
+ * @param {Number} id An integer representing the selected movie or TV show
+ * @param {String} media The specified media type of the movie / TV show
+ * @returns {Object}	 Functions that draws all relevant information in a
+ * 						 as a section.
+ */
 const drawSection = async (id, media) => {
 	const section = document.createElement("section");
-	const details = await getInfo(id, movie.fetchMovieDetails, tv.fetchTvDetails);
+	const details = await getInfo(
+		id,
+		movie.fetchMovieDetails,
+		tv.fetchTvDetails
+	);
 	const recs = await getInfo(id, movie.fetchMovieReccos, tv.fetchTvReccos);
 	const providers = await getInfo(
 		id,
 		movie.fetchMovieProviders,
 		tv.fetchTvProviders
 	);
-	const trailer = await getInfo(id, movie.fetchMovieTrailer, tv.fetchTvTrailer);
-	const reviews = await getInfo(id, movie.fetchMovieReviews, tv.fetchTvReviews);
+	const trailer = await getInfo(
+		id,
+		movie.fetchMovieTrailer,
+		tv.fetchTvTrailer
+	);
+	const reviews = await getInfo(
+		id,
+		movie.fetchMovieReviews,
+		tv.fetchTvReviews
+	);
 
 	section.classList.add("section-container");
 	function drawAll() {
 		addToSection(drawIntro());
 	}
 
-	function addToSection(part) {
-		part ? section.appendChild(part) : "";
+	// If certain info exists, i.e. reviews, append, draw the relevant
+	// information and add it to the section.
+	function addToSection(info) {
+		info && section.appendChild(info);
 	}
 
+	// Helper function to render an element and add a corresponding class name.
 	function renderElement(tag, className) {
 		const container = document.createElement(tag);
 		container.classList.add(className);
 		return container;
 	}
 
+	/**
+	 * Fetch information using movie or TV show function based on media type.
+	 * @param {Number} id Movie/TV show id
+	 * @param {Function} movieFnc Fetch movie function if applicable
+	 * @param {Function} tvFnc Fetch TV function if applicable.
+	 * @returns {void}
+	 */
 	async function getInfo(id, movieFnc, tvFnc) {
 		return media === "movie" ? await movieFnc(id) : await tvFnc(id);
 	}
 
-	// Draw (if any) title, photo, tagline, and summary.
+	/**
+	 * Draw (if any) title, photo, tagline and summary.
+	 * @param {Number} imgSize  An integer displaying the desired poster size
+	 * 							width.
+	 * @returns {Node}			Node container consisting of elements with most
+	 * 							relevant information of specified movie/TV show.
+	 */
 	const drawIntro = (imgSize) => {
 		const introContainer = document.createElement("div");
 		introContainer.classList.add("intro");
 
 		introContainer.appendChild(createTitle());
-		details.tagline ? introContainer.appendChild(writeTagline()) : "";
+		introContainer.appendChild(writeTagline());
 
 		const img = renderImg(imgSize);
-		img ? introContainer.appendChild(img) : "";
+		img && introContainer.appendChild(img);
 
+		/**
+		 * Displays the title of the movie/TV show.
+		 * @returns {Node}	Title of the movie/TV show
+		 */
 		function createTitle() {
-			const title = document.createElement("h1");
+			const title = renderElement("h1", "title");
 			title.textContent = details.mName ? details.mName : details.tName;
-			title.classList.add("title");
 			return title;
 		}
 
+		/**
+		 * Renders poster image based on img size.
+		 * @param {Number} imgSize Desired width of the poster image.
+		 * @returns {Node}         Element consisting the image poster.
+		 */
 		function renderImg(imgSize = "") {
 			const poster = document.createElement("img");
 			const baseImgUrl = "https://image.tmdb.org/t/p";
-			let img_path;
+
+			// Draw poster by default. If none exists, use backdrop photo.
+			const imgPath = details.poster_path || details.backdrop_path;
+
+			if (!imgPath) {
+				return null;
+			}
+
 			poster.classList.add("poster");
 
-			if (details.poster_path) {
-				img_path = details.poster_path;
-			} else if (details.backdrop_path) {
-				img_path = details.backdrop_path;
-			} else {
-				return;
-			}
-			!imgSize
-				? (poster.src = `${baseImgUrl}/original/${img_path}`)
-				: (poster.src = `${baseImgUrl}/w${imgSize}/${img_path}`);
+			// If img size is specified, alter image to the respective size.
+			// Otherwise, use original size.
+			poster.src = imgSize
+				? `${baseImgUrl}/w${imgSize}/${imgPath}`
+				: `${baseImgUrl}/original/${imgPath}`;
 			poster.alt = "Movie picture poster";
 			poster.setAttribute("loading", "lazy");
+
 			return poster;
 		}
 
 		function writeTagline() {
-			const tagPara = document.createElement("em");
+			const tagPara = renderElement("em", "tagline");
 			tagPara.textContent = `"${details.tagline}"`;
-			tagPara.classList.add("tagline");
 			return tagPara;
 		}
 		return introContainer;
 	};
 
+	/**
+	 * Draws all relevant subinfo (when available):
+	 * 	- Release date
+	 * 	- First aired
+	 * 	- Last aired
+	 * 	- Show status
+	 * 	- Runtime
+	 * 	- Genres
+	 * 	- Number of seasons
+	 * 	- Est Avg Episode runtime
+	 * 	- Country of origin
+	 * 	- Vote average
+	 * 	- Vote count
+	 * 	- Popularity
+	 * @returns {Node}
+	 */
 	const drawSubInfos = () => {
-		const container = document.createElement("div");
-		container.classList.add("subinfo-container");
+		const container = renderElement("div", "subinfo-container");
 
 		// Release date for movies and first aired for tv show.
 		let date, lastAired;
@@ -124,32 +180,41 @@ const drawSection = async (id, media) => {
 			createSubInfo("Runtime: ", runtime),
 			createSubInfo("Genres: ", details.genres.join(", ")),
 			createSubInfo("Number of seasons: ", details.number_of_seasons),
-			createSubInfo("Est Avg Episode Runtime: ", details.episode_run_time),
+			createSubInfo(
+				"Est Avg Episode Runtime: ",
+				details.episode_run_time
+			),
 			createSubInfo("Country of Origin: ", details.origin_country),
-
 			createSubInfo("Vote Average: ", details.vote_average),
 			createSubInfo("Vote Count: ", details.vote_count),
 			createSubInfo("Popularity: ", details.popularity),
 		];
 
-		information.forEach((info) => (info ? container.appendChild(info) : ""));
+		information.forEach((info) =>
+			info ? container.appendChild(info) : ""
+		);
 
+		/**
+		 * Create a subinfo container based on the category and fetched data.
+		 * @param {String} category String representation of info category
+		 * @param {String} info 	Fetched info based on category
+		 * @returns {Node}
+		 */
 		function createSubInfo(category, info) {
 			// Ignores tv subinfo to be displayed if it's a movie and
 			// viceversa
-			if (!info) return;
-			const subInfo = document.createElement("div");
-			const categoryName = document.createElement("span");
-			const categoryInfo = document.createElement("span");
+			if (!info) return null;
 
-			subInfo.classList.add("sub-info");
-			categoryName.classList.add("category-name");
-			categoryInfo.classList.add("category-info");
+			const subInfo = renderElement("div", "sub-info");
+			const categoryName = renderElement("span", "category-name");
+			const categoryInfo = renderElement("span", "category-info");
 
 			categoryName.textContent = category;
 			categoryInfo.textContent = info;
 
-			[categoryName, categoryInfo].forEach((info) => subInfo.appendChild(info));
+			[categoryName, categoryInfo].forEach((info) =>
+				subInfo.appendChild(info)
+			);
 			return subInfo;
 		}
 
@@ -164,21 +229,33 @@ const drawSection = async (id, media) => {
 		return container;
 	};
 
+	/**
+	 * Draw summary heading (Synopsis)
+	 * @returns {Void}
+	 */
 	const drawSummaryHeading = () => {
 		const heading = document.createElement("h2");
 		heading.textContent = "Synopsis: ";
 		return heading;
 	};
+	/**
+	 * Draw summary of specified movie / TV show.
+	 * @returns {Void}
+	 */
 	const drawSummary = () => {
-		const para = document.createElement("p");
+		const para = renderElement("p", "summary");
 		para.textContent = details.summary;
-		para.classList.add("summary");
 		return para;
 	};
 
+	/**
+	 * Draw, if any, avaiable providers (streaming, purchase, rent).
+	 * @returns {Void}
+	 */
 	const drawProviders = () => {
-		let availProviders; // Boolean that indicates if there are any watch
-		// providers for this show.
+		// Boolean that indicates if there are any watch providers for 
+		// this show.
+		let availProviders; 
 
 		// Houses the btn that opens the modal and overlay, and the available providers for 'streaming', 'rent' and 'purchase'.
 		const providerContainer = renderElement("div", "provider-container");
@@ -292,16 +369,25 @@ const drawSection = async (id, media) => {
 			let idx = 0;
 
 			[streamInfo, buyInfo, rentInfo].forEach((info) => {
-				const serviceContainer = renderElement("div", "service-container");
+				const serviceContainer = renderElement(
+					"div",
+					"service-container"
+				);
 				const serviceName = renderElement("div", "service-name");
-				const serviceNameBold = renderElement("h2", "service-name-bold");
+				const serviceNameBold = renderElement(
+					"h2",
+					"service-name-bold"
+				);
 				const providerServiceContainer = renderElement(
 					"div",
 					"provider-service-container"
 				);
 
 				info.forEach((provider) => {
-					const providerService = renderElement("div", "provider-service");
+					const providerService = renderElement(
+						"div",
+						"provider-service"
+					);
 					// Add img and name of provider.
 					const providerImg = renderElement("img", "provider-img");
 					const providerName = renderElement("span", "provider-name");
@@ -412,7 +498,9 @@ const drawSection = async (id, media) => {
 
 			// Reviews out of 10
 			if (info === review.rating) {
-				infoContainer.textContent = review.rating ? `${info}/10` : "Rating not provided..";
+				infoContainer.textContent = review.rating
+					? `${info}/10`
+					: "Rating not provided..";
 			}
 			container.appendChild(infoContainer);
 		}
@@ -451,8 +539,7 @@ const drawSection = async (id, media) => {
 				src: `https://youtube.com/embed/${key}`,
 				title: `${site} video player`,
 				frameborder: "0",
-				allow:
-					"accelerometer; autoplay; clipboard-write; encrypted media; gyroscope; picture-in-picture; web-share",
+				allow: "accelerometer; autoplay; clipboard-write; encrypted media; gyroscope; picture-in-picture; web-share",
 			};
 			for (let attr in attributes) {
 				frame.setAttribute(attr, attributes[attr]);
@@ -467,7 +554,7 @@ const drawSection = async (id, media) => {
 			const noneMsg = renderElement("h4", "no-review-msg");
 			noneMsg.textContent = "No recommendations found.";
 			recsContainer.appendChild(noneMsg);
-			recsContainer.style = "display: flex; justify-content: center;"
+			recsContainer.style = "display: flex; justify-content: center;";
 			return recsContainer;
 		}
 		for (let rec in recs) {
@@ -542,7 +629,10 @@ const drawSection = async (id, media) => {
 		const modalHeader = renderElement("div", "modal-header");
 
 		const modalBody = renderElement("div", "modal-body");
-		const modalCurrentCountry = renderElement("div", "modal-current-country");
+		const modalCurrentCountry = renderElement(
+			"div",
+			"modal-current-country"
+		);
 		const modalInputSearch = renderElement("input", "modal-input-search");
 		const modalListCountries = renderElement("ul", "modal-list-countries");
 
@@ -584,11 +674,14 @@ const drawSection = async (id, media) => {
 
 			searchLabel.htmlFor = `${modalInputSearch.id}`;
 
-			[heading, modalCurrentCountry, searchLabel, modalInputSearch].forEach(
-				(formElem) => {
-					modalHeader.appendChild(formElem);
-				}
-			);
+			[
+				heading,
+				modalCurrentCountry,
+				searchLabel,
+				modalInputSearch,
+			].forEach((formElem) => {
+				modalHeader.appendChild(formElem);
+			});
 		};
 
 		const renderBody = () => {
@@ -596,7 +689,10 @@ const drawSection = async (id, media) => {
 			for (let country in countries) {
 				let countryCode = countries[country];
 
-				const countryContainer = renderElement("li", "country-container");
+				const countryContainer = renderElement(
+					"li",
+					"country-container"
+				);
 				const countryFlag = renderCountryFlag(countryCode, country);
 				const countryName = renderElement("a", "country-name");
 
@@ -624,7 +720,9 @@ const drawSection = async (id, media) => {
 		const addCloseFnc = () => {
 			modalCloseBtn.addEventListener("click", (e) => {
 				e.preventDefault();
-				const currentForm = document.querySelector(".modal-country-container");
+				const currentForm = document.querySelector(
+					".modal-country-container"
+				);
 				document.querySelector(".face-mask").style.display = "none";
 
 				setTimeout(setInvisible, 100);
