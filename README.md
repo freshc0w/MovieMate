@@ -1,6 +1,6 @@
 # MovieMate
-MovieMate is a web application that allows user to search for movies and TV shows. <br> User can get information about the movie/show, such as the watch providers based on the countries they can select, main relevant information, trailer video and recommendations.
-Features
+MovieMate is a web application that allows user to search for movies and TV shows using the TMDB API with asynchronous fncs.<br><br> User can get information about the movie/show, such as the watch providers based on the countries they can select, main relevant information, trailer video and recommendations.
+<h1>Features</h1>
 <ul>
   <li>Search for movies and TV shows</li>
   <li>Get detailed information about the movie/show</li>
@@ -9,3 +9,13 @@ Features
   <li>Get recommendations for similar movies/shows</li>
   <li>Responsive design for mobile and desktop</li>
 </ul>
+
+<h2>Technologies Used</h2>
+<ul>
+  <li>HTML</li>
+  <li>CSS</li>
+  <li>JavaScript</li>
+  <li>Webpack</li>
+</ul>
+
+<h5>Live Website: https://freshc0w.github.io/MovieMate/</h5>
