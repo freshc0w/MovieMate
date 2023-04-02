@@ -257,7 +257,8 @@ const drawSection = async (id, media) => {
 		// this show.
 		let availProviders;
 
-		// Houses the btn that opens the modal and overlay, and the available providers for 'streaming', 'rent' and 'purchase'.
+		// Houses the btn that opens the modal and overlay, and the available
+		// providers for 'streaming', 'rent' and 'purchase'.
 		const providerContainer = renderElement("div", "provider-container");
 		const countryBtn = renderElement("button", "country-btn");
 		const houseContainer = renderElement("div", "house-provider-container");
@@ -265,7 +266,8 @@ const drawSection = async (id, media) => {
 			providerContainer.appendChild(elem);
 		});
 
-		// Search for default country "Australia". If none found. Draw the first country's provider.
+		// Search for default country "Australia". If none found. Draw the
+		// first country's provider.
 		if (Object.keys(providers).length) {
 			availProviders = true;
 			if (Object.keys(providers).includes("Australia")) {
@@ -281,24 +283,22 @@ const drawSection = async (id, media) => {
 			} else {
 				// Draw first country's flag in btn.
 				const firstProvider = Object.keys(providers)[0];
-				try {
-					const flag = renderElement("img", "country-flag");
-					flag.src = `https://flagsapi.com/${
-						providers[firstProvider].countryCode}/shiny/64.png`
-					flag.alt = `${firstProvider} flag`;
-					flag.classList.add("btn-country-flag");
-					countryBtn.appendChild(flag);
-				} catch (err) {
-					console.log(err);
-				}
+				console.log(firstProvider);
+				const flag = renderElement("img", "country-flag");
+				flag.src = `https://flagsapi.com/${providers[firstProvider].countryCode}/shiny/64.png`;
+				flag.alt = `${firstProvider} flag`;
+				flag.classList.add("btn-country-flag");
 				drawProvider(firstProvider);
 				countryBtn.textContent = `${firstProvider}`;
+				countryBtn.appendChild(flag);
 			}
 		} else {
 			availProviders = false;
 			countryBtn.textContent =
 				"No countries offer this tv/movie at the moment.";
 			countryBtn.classList.add("lost-providers");
+
+			// Insert lost gif and message if no providers are available.
 			const lostGif = renderElement("img", "lost-gif");
 			lostGif.src = "./img/lost-gif.gif";
 			lostGif.alt = "Prover cannot be found picture.";
@@ -321,24 +321,44 @@ const drawSection = async (id, media) => {
 				applyChooseCountryFncs();
 			}
 		});
+
+		/**
+		 * Function that applys a click event listener on every country in
+		 * the modal list. Changes the available providers based on the selected
+		 * country and hides modal.
+		 * @returns {Void}
+		 */
 		function applyChooseCountryFncs() {
 			const countries = document.querySelectorAll(".country-container");
-			countries.forEach((country) =>
-				country.addEventListener("click", (e) => {
-					e.preventDefault();
-					if (country.lastChild.textContent) {
-						const selectedCountry = country.lastChild.textContent;
-						clearProvider();
-						drawProvider(selectedCountry);
-					}
-					document.querySelector(".modal-country-container").remove();
-					document.querySelector(".face-mask").style.display = "none";
-				})
-			);
+
+			function handleClick(e) {
+				e.preventDefault();
+				const selectedCountry = this.lastChild.textContent.trim();
+
+				if (selectedCountry) {
+					clearProvider();
+					drawProvider(selectedCountry);
+				}
+
+				// Remove modal and mask overlay.
+				document.querySelector(".modal-country-container").remove();
+				document.querySelector(".face-mask").style.display = "none";
+			}
+
+			// Apply handleClick to all country-selectors.
+			countries.forEach((country) => {
+				country.addEventListener("click", handleClick);
+			});
 		}
 
 		return providerContainer;
 
+		/**
+		 * Draws the availble providers and update the text content of the
+		 * button-selector based on the selected country.
+		 * @param {String} countryName Current country in which the available
+		 * 							   providers are displayed.
+		 */
 		function drawProvider(countryName = "Australia") {
 			// Change text of btn to countryName
 			countryBtn.textContent = countryName;
@@ -347,13 +367,12 @@ const drawSection = async (id, media) => {
 			try {
 				const flag = renderElement("img", "country-flag");
 				// flag.setAttribute("crossorigin", "anonymous");
-				flag.src = `https://flagsapi.com/${
-						providers[countryName].countryCode}/shiny/64.png`
+				flag.src = `https://flagsapi.com/${providers[countryName].countryCode}/shiny/64.png`;
 				flag.alt = `${countryName} flag`;
 				flag.classList.add("btn-country-flag");
 				countryBtn.appendChild(flag);
-			} catch (err) {
-				console.log(err);
+			} catch (error) {
+				console.error("Failed to retrieve flag", error.message);
 			}
 			const downArrow = renderElement("i", "fas");
 			downArrow.classList.add("fa-angle-down");
@@ -364,7 +383,8 @@ const drawSection = async (id, media) => {
 			const rentInfo = providers[countryName].rent;
 
 			const serviceNames = ["Stream at:", "Purchase at:", "Rent at:"];
-			// To assign names for each sevice providers.
+
+			// idx assign position/names for each sevice providers.
 			// This increments as providers are listed for each service.
 			let idx = 0;
 
@@ -393,7 +413,8 @@ const drawSection = async (id, media) => {
 					const providerName = renderElement("span", "provider-name");
 
 					if (provider.provider_logo_path) {
-						providerImg.src = `https://image.tmdb.org/t/p/original/${provider.provider_logo_path}`;
+						providerImg.src = `https://image.tmdb.org/t/p/original/
+						${provider.provider_logo_path}`;
 						providerImg.alt = `${provider.provider_name} picture.`;
 						providerImg.setAttribute("loading", "lazy");
 						providerName.textContent = provider.provider_name;
@@ -409,17 +430,23 @@ const drawSection = async (id, media) => {
 					serviceNameBold.textContent = `${serviceNames[idx]}`;
 					serviceName.appendChild(serviceNameBold);
 				}
-				idx++;
+				idx++; // Increment idx to go to the next type of service.
 				serviceContainer.appendChild(serviceName);
 				serviceContainer.appendChild(providerServiceContainer);
 				houseContainer.appendChild(serviceContainer);
 			});
 		}
 		function clearProvider() {
-			houseContainer.innerHTML = "";
+			while (houseContainer.firstChild) {
+				houseContainer.removeChild(houseContainer.lastChild);
+			}
 		}
 	};
 
+	/**
+	 * Draws a maximum of 5 reviews based on the searched movie / TV SHOW.
+	 * @returns {Node}
+	 */
 	const drawReviews = () => {
 		if (!reviews) return;
 		const reviewContainer = renderElement("div", "review-container");
@@ -431,35 +458,55 @@ const drawSection = async (id, media) => {
 		return reviewContainer;
 	};
 
-	const drawReview = (review, container) => {
+	/**
+	 * Draws a singular review and displays all the relevant information:
+	 * 	- Author's name
+	 * 	- Author's profile pic
+	 *  - Rating of the movie / TV show.
+	 * @param {Object} review Review information
+	 * @param {Node} reviewContainer reviewContainer that houses all the
+	 * 								 reviews.
+	 */
+	const drawReview = (review, reviewContainer) => {
+		// Heading includes author name, rating and their respective profile
+		// pic.
 		const renderReviewHeading = () => {
 			const reviewHeading = renderElement("div", "review-heading");
-			// Render author's profile pic if any.
-			if (review.pic_path) {
-				const authorPic = renderElement("img", "author-pic");
-				if (review.pic_path.slice(1, 5) !== "http") {
-					authorPic.src = `https://image.tmdb.org/t/p/w300/${review.pic_path}`;
-				} else {
-					authorPic.src = review.pic_path.slice(1);
-				}
 
-				authorPic.alt = `${review.author} profile picture.`;
-				reviewHeading.appendChild(authorPic);
+			// Render author's profile pic if any.
+			try {
+				if (review.pic_path) {
+					const authorPic = renderElement("img", "author-pic");
+					authorPic.src =
+						// Api gives two different types of url link. Need to
+						// differentiate between them to retrieve src url.
+						review.pic_path.slice(1, 5) !== "http"
+							? `https://image.tmdb.org/t/p/w300/${review.pic_path}`
+							: review.pic_path.slice(1);
+					authorPic.alt = `${review.author} profile picture.`;
+					reviewHeading.appendChild(authorPic);
+				}
+			} catch (error) {
+				console.error(
+					"Cannot fetch author profile pictures:",
+					error.message
+				);
 			}
 
 			addRevInfo(review.author, reviewHeading, "h3", "review-author");
-
 			addRevInfo(review.rating, reviewHeading, "span", "review-rating");
 
 			return reviewHeading;
 		};
 
+		// Draw review content.
 		const renderReviewBody = () => {
 			const reviewContent = renderElement("p", "review-content");
 			reviewContent.textContent = `"${review.content}"`;
 			return reviewContent;
 		};
 
+		// Draw review footer containing link url and last date updated.
 		const renderReviewFooter = () => {
 			const reviewFooter = renderElement("div", "review-footer");
 			const reviewUrl = renderElement("a", "review-link");
@@ -477,16 +524,21 @@ const drawSection = async (id, media) => {
 			reviewFooter.appendChild(reviewUpdated);
 
 			return reviewFooter;
+			/**
+			 *
+			 * @param {String} date date formatted dd-mm-yyyy
+			 * @returns {String} 	date formatted dd/mm/yyyy
+			 */
 			function formatRevDate(date) {
-				date = date.split("-");
-				date[2] = date[2].slice(0, 2) + "/";
-				return date[2].concat(date.slice(0, 2).reverse().join("/"));
+				const [year, month, day] = date.split("-");
+				return `${day.slice(0, 2)}/${month}/${year}`;
 			}
 		};
 
-		container.appendChild(renderReviewHeading());
-		container.appendChild(renderReviewBody());
-		container.appendChild(renderReviewFooter());
+		// Add to review housing container
+		reviewContainer.appendChild(renderReviewHeading());
+		reviewContainer.appendChild(renderReviewBody());
+		reviewContainer.appendChild(renderReviewFooter());
 
 		// Helper fnc that collects corresponding info and
 		// creates a span/div container if info exists. Otherwise, return;
@@ -496,7 +548,7 @@ const drawSection = async (id, media) => {
 				infoContainer.textContent = info;
 			}
 
-			// Reviews out of 10
+			// Render review rating out of 10. If none provided, render message.
 			if (info === review.rating) {
 				infoContainer.textContent = review.rating
 					? `${info}/10`
@@ -506,6 +558,11 @@ const drawSection = async (id, media) => {
 		}
 	};
 
+	/**
+	 * Add trailer video to section
+	 * @returns {Node}	Container that houses the trailer with its respective
+	 * 					heading
+	 */
 	const drawTrailer = () => {
 		const trailerContainer = renderElement("div", "trailer-container");
 		const trailerHeading = renderElement("div", "trailer-heading");
@@ -521,6 +578,11 @@ const drawSection = async (id, media) => {
 		}
 		return trailerContainer;
 
+		/**
+		 * Render trailer heading and display language of the video.
+		 * @returns {Array}	Array containing Node elems of trailer's name
+		 * 					and language.
+		 */
 		function renderTrailerHeading() {
 			const trailerName = renderElement("h2", "trailer-name");
 			const trailerLanguage = renderElement("h3", "trailer-lang");
@@ -530,6 +592,13 @@ const drawSection = async (id, media) => {
 			return [trailerName, trailerLanguage];
 		}
 
+		/**
+		 * Returns the trailer video to add to the  the trailer container Node.
+		 * Also adds all the relevant attributes to the node elem.
+		 * @param {Number} key 	Key that uniquely identifies the trailer video
+		 * @param {String} site Name of web player
+		 * @returns {Node} 		Element that frames the playable video
+		 */
 		function addVideo(key, site) {
 			const frame = renderElement("iframe", "trailer-video");
 			const attributes = {
@@ -548,6 +617,12 @@ const drawSection = async (id, media) => {
 			return frame;
 		}
 	};
+
+	/**
+	 * Returns a node element that draws the recommendations.
+	 * @returns {Node}	Serves as a housing container for all the
+	 * 					recommendations.
+	 */
 	const drawRecs = () => {
 		const recsContainer = renderElement("div", "recs-container");
 		if (Object.keys(recs).length === 0) {
@@ -563,6 +638,13 @@ const drawSection = async (id, media) => {
 		return recsContainer;
 	};
 
+	/**
+	 * Returns a node element that contains all the relevant information of a
+	 * recommendation based on the specific movie/TV show.
+	 * @param {Object} rec  Specific recommendation's relevant information.
+	 * @returns {Node} 		A node element that houses a singular recco.
+	 * 						Contains all the relevant information and posters.
+	 */
 	const drawRec = (rec) => {
 		const recContainer = renderElement("div", "rec-container");
 		const recPoster = renderElement("img", "rec-poster");
@@ -588,6 +670,13 @@ const drawSection = async (id, media) => {
 		recContainer.appendChild(info);
 		return recContainer;
 
+		/**
+		 * Returns an Array with nodes with  relevant information on the
+		 * specified recommendation.
+		 * @param {Object} subInfo  All the relevant information needed for a
+		 * 							recommendation.
+		 * @returns {Array}			All <p> nodes containing the information.
+		 */
 		function renderInfo(subInfo) {
 			if (subInfo) {
 				// If info exists.
@@ -596,6 +685,7 @@ const drawSection = async (id, media) => {
 				const voteCount = renderElement("p", "rec-vote-count");
 				const voteAvg = renderElement("p", "rec-vote-avg");
 
+				// Sort text content of nodes based on the media type.
 				recName.textContent = subInfo.tName
 					? `Name: ${subInfo.tName}`
 					: `Name: ${subInfo.mName}`;
@@ -610,6 +700,15 @@ const drawSection = async (id, media) => {
 		}
 	};
 
+	/**
+	 * Draw countries modal that appears when country-selector btn is clicked
+	 * on. The form structure is formatted by two parts:
+	 *  - Heading
+	 * 	- Body.
+	 * The event listener for the country-selector btn is also attached.
+	 * @param {String} currCountryName  Current name of the country
+	 * 									e.g. "Australia"
+	 */
 	function renderCountriesModal(currCountryName) {
 		// Country names
 		const providerCountries = Object.keys(providers);
@@ -625,9 +724,9 @@ const drawSection = async (id, media) => {
 			}
 		});
 
+		// Initialise container nodes
 		const modalContainer = renderElement("form", "modal-country-container");
 		const modalHeader = renderElement("div", "modal-header");
-
 		const modalBody = renderElement("div", "modal-body");
 		const modalCurrentCountry = renderElement(
 			"div",
@@ -635,9 +734,13 @@ const drawSection = async (id, media) => {
 		);
 		const modalInputSearch = renderElement("input", "modal-input-search");
 		const modalListCountries = renderElement("ul", "modal-list-countries");
-
 		const modalCloseBtn = renderElement("button", "modal-close-btn");
 
+		/**
+		 * Draws modal heading and add it to the modal form container.
+		 * Should include:
+		 * 		- Search bar that filters different country results.
+		 */
 		const renderHeading = () => {
 			// Heading that displays current country selected.
 			const heading = document.createElement("h2");
@@ -646,6 +749,7 @@ const drawSection = async (id, media) => {
 			const currCountry = document.createElement("h3");
 			const searchLabel = document.createElement("label");
 
+			// Add respective attributes to search bar node.
 			const searchAttributes = {
 				id: "modal-input-search",
 				type: "search",
@@ -657,6 +761,9 @@ const drawSection = async (id, media) => {
 			for (let i in searchAttributes) {
 				modalInputSearch.setAttribute(i, searchAttributes[i]);
 			}
+
+			// Filter countries based on value after each keyup event using
+			// the filterResults fnc.
 			modalInputSearch.addEventListener("keyup", filterResults);
 			modalInputSearch.addEventListener("submit", (e) => {
 				e.preventDefault();
@@ -669,6 +776,7 @@ const drawSection = async (id, media) => {
 			);
 			currCountry.textContent = currCountryName;
 
+			// Have the current country with its flag as a title for the modal.
 			modalCurrentCountry.appendChild(currCountryFlag);
 			modalCurrentCountry.appendChild(currCountry);
 
@@ -684,11 +792,14 @@ const drawSection = async (id, media) => {
 			});
 		};
 
+		/**
+		 * For every country where a watch provider exists for the movie/TV
+		 * show, render the name and country flag as an option in a list format.
+		 */
 		const renderBody = () => {
 			modalListCountries.id = "countries-list";
-			for (let country in countries) {
-				let countryCode = countries[country];
 
+			Object.entries(countries).forEach(([country, countryCode]) => {
 				const countryContainer = renderElement(
 					"li",
 					"country-container"
@@ -697,20 +808,24 @@ const drawSection = async (id, media) => {
 				const countryName = renderElement("a", "country-name");
 
 				countryName.textContent = country;
-				countryName.setAttribute("href", "#");
+				countryName.href = "#";
 
 				[countryFlag, countryName].forEach((countryElem) => {
 					countryContainer.appendChild(countryElem);
 				});
 
 				modalListCountries.appendChild(countryContainer);
-			}
+			});
 
 			[modalListCountries].forEach((formElem) => {
 				modalBody.appendChild(formElem);
 			});
 		};
 
+		/**
+		 * Draw close btn that appears top-right of form.
+		 * @param {Function} closeFnc Function that closes the form.
+		 */
 		const renderCloseBtn = (closeFnc) => {
 			const closeSymb = renderElement("i", "fa");
 			closeSymb.classList.add("fa-close");
@@ -725,30 +840,31 @@ const drawSection = async (id, media) => {
 				);
 				document.querySelector(".face-mask").style.display = "none";
 
-				setTimeout(setInvisible, 100);
+				setTimeout(setInvisible, 100); // delay for animation to happen
 				function setInvisible() {
 					currentForm.style.transform = "translateY(-125%)";
 				}
-				setTimeout(removeModal, 750);
+				setTimeout(removeModal, 750); // delay for animation.
 				function removeModal() {
 					currentForm.style.opacity = 0;
 					currentForm.style.visibility = "hidden";
 					currentForm.remove();
 				}
-				// currentForm.remove();
 			});
 		};
 
-		// Render sections of the form.
+		// Render sections of the form to their respective containers.
 		renderHeading();
 		renderBody();
 		renderCloseBtn(addCloseFnc);
 
+		// Add each housing container to the overall modal container.
 		[modalHeader, modalBody, modalCloseBtn].forEach((modalElem) =>
 			modalContainer.appendChild(modalElem)
 		);
 
-		setTimeout(makeVisible, 100);
+		setTimeout(makeVisible, 100); // delay for animation.
+
 		function makeVisible() {
 			// Set styling to visible for animation fade in effect.
 			modalContainer.style.visibility = "visible";
@@ -760,15 +876,30 @@ const drawSection = async (id, media) => {
 		bodyDocument.append(modalContainer);
 		document.querySelector(".face-mask").style.display = "block";
 
+		/**
+		 * 
+		 * @param {String} countryCode  Country code in a 2 letter format.
+		 * 								e.g. "AU"
+		 * @param {*} countryName 		Full country name i.e. "Australia"
+		 * @returns {Node}				Img Node with flag.
+		 */
 		function renderCountryFlag(countryCode, countryName) {
 			const flag = renderElement("img", "country-flag");
 			// flag.setAttribute("crossorigin", "anonymous");
-			flag.src = `https://flagsapi.com/${
-						providers[countryName].countryCode}/shiny/64.png`
+			try {
+				flag.src = `https://flagsapi.com/${providers[countryName]
+							.countryCode}/shiny/64.png`;
+			} catch(error) {
+				console.error(`Failed to retrieve flag for: ${countryName}`);
+			}
 			flag.alt = `${countryName} flag`;
 			return flag;
 		}
 
+		/**
+		 * Filter country names based on the value of the search bar in the 
+		 * form modal.
+		 */
 		function filterResults() {
 			let input, filter, ul, li, a, i, txtValue;
 			input = document.getElementById("modal-input-search");
@@ -778,8 +909,14 @@ const drawSection = async (id, media) => {
 
 			// Logic that filters the countries based on input.
 			for (i = 0; i < li.length; i++) {
+
+				// Specific country identified in the iteration.
 				a = li[i].getElementsByTagName("a")[0];
 				txtValue = a.textContent || a.innerText;
+
+				// Attempts to find the text value of the search's value. If
+				// found, don't change display styling. Otherwise, set the
+				// display of the country-container to none.
 				if (txtValue.toUpperCase().indexOf(filter) > -1) {
 					li[i].style.display = "";
 				} else {
@@ -788,6 +925,13 @@ const drawSection = async (id, media) => {
 			}
 		}
 	}
+
+	/**
+	 * Similiar logic to filterResults().
+	 * Function attempts to find the specific country based on countryName param
+	 * . If found, highlight the specified country's appearance in the modal.
+	 * @param {String} countryName Full country name e.g. "Australia"
+	 */
 	function highlightCurrCountry(countryName) {
 		// Highlight selected current country in the list of countries when
 		// modal is opened. Add a tick icon simultaneously
@@ -798,9 +942,14 @@ const drawSection = async (id, media) => {
 		for (i = 0; i < li.length; i++) {
 			a = li[i].getElementsByTagName("a")[0];
 			txtValue = a.textContent || a.innerText;
+
+			// Condition that matches the text value and its country name.
+			// If met, change styling to highlight.
 			if (txtValue === countryName) {
 				li[i].style.backgroundColor = "rgba(25, 150, 150, 0.5)";
 				li[i].style.transform = "scale(1.025)";
+
+				// Add tick icon to selected country-container
 				const tickIcon = renderElement("i", "fa");
 				tickIcon.classList.add("fa-check");
 				li[i].append(tickIcon);
