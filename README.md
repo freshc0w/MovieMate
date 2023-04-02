@@ -17,5 +17,5 @@ MovieMate is a web application that allows user to search for movies and TV show
   <li>JavaScript</li>
   <li>Webpack</li>
 </ul>
-![Alt text](https://github.com/freshc0w/MovieMate/blob/main/project-scrnshot-1.png?raw=true)
+![1-Screenshot](https://github.com/freshc0w/MovieMate/blob/main/dist/img/project-scrnshot-1.png?raw=true)
 <h5>Live Website: https://freshc0w.github.io/MovieMate/</h5>
