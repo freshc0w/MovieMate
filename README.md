@@ -3,7 +3,7 @@
 MovieMate is a web application that allows user to search for movies and TV shows using the TMDB API with asynchronous fncs.<br><br> User can get information about the movie/show, such as the watch providers based on the countries they can select, main relevant information, trailer video and recommendations.
 <h1>Features</h1>
 <ul>
-  <li>Search for movies and TV shows</li>
+  <li>Search for movies and TV shows and have up to 20 movies/shows related to your search.</li>
   <li>Get detailed information about the movie/show</li>
   <li>View trailers and related videos</li>
   <li>See watch providers for the movie/show based on the country selected</li>
