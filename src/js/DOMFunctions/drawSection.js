@@ -253,9 +253,9 @@ const drawSection = async (id, media) => {
 	 * @returns {Void}
 	 */
 	const drawProviders = () => {
-		// Boolean that indicates if there are any watch providers for 
+		// Boolean that indicates if there are any watch providers for
 		// this show.
-		let availProviders; 
+		let availProviders;
 
 		// Houses the btn that opens the modal and overlay, and the available providers for 'streaming', 'rent' and 'purchase'.
 		const providerContainer = renderElement("div", "provider-container");
@@ -271,8 +271,8 @@ const drawSection = async (id, media) => {
 			if (Object.keys(providers).includes("Australia")) {
 				// Draw Aus flag in btn.
 				const flag = renderElement("img", "country-flag");
-				flag.setAttribute("crossorigin", "anonymous");
-				flag.src = `https://countryflagsapi.com/png/Australia`;
+				// flag.setAttribute("crossorigin", "anonymous");
+				flag.src = `https://flagsapi.com/AU/shiny/64.png`;
 				flag.alt = `Australia flag`;
 				flag.classList.add("btn-country-flag");
 				drawProvider("Australia");
@@ -283,8 +283,8 @@ const drawSection = async (id, media) => {
 				const firstProvider = Object.keys(providers)[0];
 				try {
 					const flag = renderElement("img", "country-flag");
-					flag.setAttribute("crossorigin", "anonymous");
-					flag.src = `https://countryflagsapi.com/png/${firstProvider}`;
+					flag.src = `https://flagsapi.com/${
+						providers[firstProvider].countryCode}/shiny/64.png`
 					flag.alt = `${firstProvider} flag`;
 					flag.classList.add("btn-country-flag");
 					countryBtn.appendChild(flag);
@@ -311,7 +311,6 @@ const drawSection = async (id, media) => {
 		downArrow.classList.add("fa-angle-down");
 		countryBtn.appendChild(downArrow);
 
-		// availProviders ? renderCountriesModal(countryBtn.textContent) : ""; // temp
 		// Add btn event click listener to open modal
 		countryBtn.addEventListener("click", (e) => {
 			e.preventDefault();
@@ -347,8 +346,9 @@ const drawSection = async (id, media) => {
 			// Add arrows and flags into btn after every selection.
 			try {
 				const flag = renderElement("img", "country-flag");
-				flag.setAttribute("crossorigin", "anonymous");
-				flag.src = `https://countryflagsapi.com/png/${countryName}`;
+				// flag.setAttribute("crossorigin", "anonymous");
+				flag.src = `https://flagsapi.com/${
+						providers[countryName].countryCode}/shiny/64.png`
 				flag.alt = `${countryName} flag`;
 				flag.classList.add("btn-country-flag");
 				countryBtn.appendChild(flag);
@@ -762,8 +762,9 @@ const drawSection = async (id, media) => {
 
 		function renderCountryFlag(countryCode, countryName) {
 			const flag = renderElement("img", "country-flag");
-			flag.setAttribute("crossorigin", "anonymous");
-			flag.src = `https://countryflagsapi.com/png/${countryCode}`;
+			// flag.setAttribute("crossorigin", "anonymous");
+			flag.src = `https://flagsapi.com/${
+						providers[countryName].countryCode}/shiny/64.png`
 			flag.alt = `${countryName} flag`;
 			return flag;
 		}
