@@ -1,13 +1,24 @@
 const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
 
+/**
+ * Returns the relevant information of a tv show based on its id.
+ * @param {Number} tv_id Identifies tv show by an integer
+ * @returns {Object}	 Relevant information of TV SHOW. i.e. name and number
+ * 						 seasons
+ */
 async function fetchTvDetails(tv_id) {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/tv/${tv_id}?api_key=${API_KEY}&language=en-US`,
+			`https://api.themoviedb.org/3/tv/${tv_id}?api_key=${API_KEY}
+			&language=en-US`,
 			{ mode: "cors" }
 		);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch TV details from API.");
+		}
+
 		const data = await response.json();
-		console.log(data);
 
 		const genres = data.genres.reduce((acc, val) => [...acc, val.name], []);
 
@@ -31,8 +42,10 @@ async function fetchTvDetails(tv_id) {
 			genres: genres,
 		};
 		return generalInfo;
-	} catch (err) {
-		console.log(err);
+	} catch (error) {
+		console.error(
+			`Failed to fetch relevant information for TV SHOW: ${error.message}`
+		);
 	}
 }
 
@@ -41,44 +54,49 @@ Returns an array of recommended tv shows with their name, id, poster_path and
 backdrop_path recorded. 
 If no movies are recommended, return null;
 */
+/**
+ * Returns, at most 5, recommendation based on the specified TV SHOW. The
+ * most relevant information for each recco is returned as an object.
+ * @param {Number} tv_id Identifies the specified TV show by an Integer
+ * @returns {Object} 	 Max 5 recommendations with its relevant information
+ * 						 as an object.
+ */
 async function fetchTvReccos(tv_id) {
 	try {
 		const response = await fetch(
 			`https://api.themoviedb.org/3/tv/${tv_id}/recommendations?api_key=${API_KEY}&language=en-US&page=1`,
 			{ mode: "cors" }
 		);
+		if (!response.ok) {
+			throw new Error("Failed to fetch TV recommendations from API.");
+		}
 		const data = await response.json();
 
-		const recTvs = {};
-		if (data.results) {
-			let count = 1;
-			for (let tv of data.results) {
-				recTvs[tv.original_name] = {
-					tName: tv.original_name,
-					id: tv.id,
-					first_air_date: tv.first_air_date,
-					poster_path: tv.poster_path,
-					backdrop_path: tv.backdrop_path,
-					vote_average: tv.vote_average,
-					vote_count: tv.vote_count,
-				};
-				if (count === 5) {
-					// max 5 tv shows to be recommended.
-					break;
-				}
-				count++;
-			}
-		}
-		return recTvs;
-	} catch {
-		console.log(err);
+		const recTvs = data.results?.slice(0, 5).reduce((acc, tv) => {
+			acc[tv.original_name] = {
+				tName: tv.original_name,
+				id: tv.id,
+				first_air_date: tv.first_air_date,
+				poster_path: tv.poster_path,
+				backdrop_path: tv.backdrop_path,
+				vote_average: tv.vote_average,
+				vote_count: tv.vote_count,
+			};
+			return acc;
+		}, {});
+
+		return recTvs || {};
+	} catch (error) {
+		console.error(`Failed to fetch TV recommendations: ${error.message}`);
 	}
 }
 
-/* 
-Returns an obj with countries and available streaming services, buy or rent
-for specified tv show in EACH country.
-*/
+/**
+ * Returns relevant TV providers based on the selected TV show.
+ * @param {Number} tv_id Identifies the specified TV show by an Integer
+ * @returns {Object}	 TV providers for streaming, purchase and/or rent
+ * 						 for the specified TV show.
+ */
 async function fetchTvProviders(tv_id) {
 	const providersByCountry = {};
 	try {
@@ -86,6 +104,10 @@ async function fetchTvProviders(tv_id) {
 			`https://api.themoviedb.org/3/tv/${tv_id}/watch/providers?api_key=${API_KEY}`,
 			{ mode: "cors" }
 		);
+
+		if (!response.ok) {
+			throw new Error(`Failed to fetch TV show providers from API.`);
+		}
 		const data = await response.json();
 
 		for (const countryCode in data.results) {
@@ -134,32 +156,38 @@ async function fetchTvProviders(tv_id) {
 			);
 		}
 		return providersByCountry;
-	} catch (err) {
-		console.log(err);
+	} catch (error) {
+		console.error(`Failed to fetch TV providers: ${error.message}`);
 	}
 }
 
-// Find tv trailer
+/**
+ * Returns the relevant information of the tv trailer. The id should also
+ * be retrieved so that the user can search for the tv respectively.
+ * @param {Number} tv_id Identifies the tv show as an Integer.
+ * @returns {Object}	 Relevant info of trailer including video name, site
+ * 						 language and type.
+ */
 async function fetchTvTrailer(tv_id) {
 	try {
-		let tvTrailer;
 		const response = await fetch(
 			`https://api.themoviedb.org/3/tv/${tv_id}/videos?api_key=${API_KEY}`,
 			{ mode: "cors" }
 		);
+		if (!response.ok) {
+			throw new Error("Failed to fetch TV trailer from API.");
+		}
 		const data = await response.json();
 
-		const trailers = data.results.filter((video) => video.type === "Trailer");
+		const trailers = data.results.filter(
+			(video) => video.type === "Trailer"
+		);
 
-		if (trailers.length === 0) return false;
-		// Find official trailer.
-		const official = trailers.filter((video) => {
-			video.official === true;
-		});
+		if (trailers.length === 0) return;
 
-		official.length !== 0
-			? (tvTrailer = official[0])
-			: (tvTrailer = trailers[0]);
+		// Find official trailer or use the first trailer.
+		const tvTrailer =
+			trailers.find((video) => video.official === true) || trailers[0];
 
 		return {
 			tName: tvTrailer.name,
@@ -168,38 +196,45 @@ async function fetchTvTrailer(tv_id) {
 			type: tvTrailer.type,
 			lang: getLanguage(tvTrailer.iso_639_1),
 		};
-	} catch (err) {
-		console.log(err);
+	} catch (error) {
+		console.error(`Failed to fetch TV trailer: ${error.message}`);
 	}
 }
 
-// Returns an arr of a maximum of 5 reviews based on the tv show from
-// random sources. If no reviews are found, this fnc returns false.
+/**
+ * Returns the first 5 reviews with their ratings, author information and links.
+ * @param {Number} movie_id Identifies the TV show as an Integer
+ * @returns {Object}		Review information including the content, author,
+ * 							links and ratings.
+ */
 async function fetchTvReviews(tv_id) {
 	try {
-		let reviews = [];
 		const response = await fetch(
-			`https://api.themoviedb.org/3/tv/${tv_id}/reviews?api_key=${API_KEY}&language=en-US&page=1`,
+			`https://api.themoviedb.org/3/tv/${tv_id}/reviews?api_key=
+			${API_KEY}&language=en-US&page=1`,
 			{ mode: "cors" }
 		);
+		if (!response.ok) {
+			throw new Error("Failed to fetch TV reviews from API.");
+		}
 		const data = await response.json();
 		if (data.results.length === 0) return false;
 
-		let count = 1;
-		data.results.forEach((review) => {
-			reviews.push({
+		// Only return the first 5 reviews maximum.
+		const reviews = data.results
+			.map((review) => ({
 				author: review.author,
-				rating: review.author_details.rating,
-				pic_path: review.author_details.avatar_path,
+				rating: review.author_details?.rating,
+				pic_path: review.author_details?.avatar_path,
 				content: review.content,
 				url: review.url,
 				last_updated: review.updated_at,
-			});
-			count++;
-		});
-		return reviews.slice(0, 5);
-	} catch (err) {
-		console.log(err);
+			}))
+			.slice(0, 5);
+
+		return reviews;
+	} catch (error) {
+		console.error(`Failed to fetch TV reviews: ${error.message}`);
 	}
 }
 

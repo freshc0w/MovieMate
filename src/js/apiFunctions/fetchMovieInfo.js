@@ -51,7 +51,7 @@ async function fetchMovieDetails(movie_id) {
 }
 
 /**
- * Reurns movie recommendations as an object with its relevant information. 
+ * Reurns movie recommendations as an object with its relevant information.
  * Maximum 5 movies can be recommended and the .
  * @param {Number} movie_id Identifies the movie as an Integer.
  * @returns {Object}		An object that has the relevant information with
@@ -181,9 +181,9 @@ async function fetchMovieTrailer(movie_id) {
 		);
 		if (trailers.length === 0) return;
 
-		// Find official trailer.
-		const official = trailers.find((video) => video.official === true);
-		const movieTrailer = official ?? trailers[0];
+		// Find official trailer.OR use first trailer
+		const movieTrailer =
+			trailers.find((video) => video.official === true) || trailers[0];
 
 		return {
 			tName: movieTrailer.name,
@@ -192,8 +192,8 @@ async function fetchMovieTrailer(movie_id) {
 			type: movieTrailer.type,
 			lang: getLanguage(movieTrailer.iso_639_1),
 		};
-	} catch (err) {
-		console.error(`Failed to fetch movie trailers: ${err.message}`);
+	} catch (error) {
+		console.error(`Failed to fetch movie trailers: ${error.message}`);
 	}
 }
 
