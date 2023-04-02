@@ -100,7 +100,8 @@ async function fetchMovieProviders(movie_id) {
 	const providersByCountry = {};
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movie_id}/watch/providers?api_key=${API_KEY}`,
+			`https://api.themoviedb.org/3/movie/${movie_id}/watch/providers
+			?api_key=${API_KEY}`,
 			{ mode: "cors" }
 		);
 		const data = await response.json();
@@ -166,7 +167,8 @@ async function fetchMovieProviders(movie_id) {
 async function fetchMovieTrailer(movie_id) {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=${API_KEY}&mode=cors`
+			`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=
+			${API_KEY}&mode=cors`
 		);
 		if (!response.ok) {
 			throw new Error("Failed to fetch movie trailers from API.");
@@ -205,7 +207,8 @@ async function fetchMovieReviews(movie_id) {
 	try {
 		let reviews = [];
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movie_id}/reviews?api_key=${API_KEY}&language=en-US&page=1`,
+			`https://api.themoviedb.org/3/movie/${movie_id}/reviews?api_key=
+			${API_KEY}&language=en-US&page=1`,
 			{ mode: "cors" }
 		);
 		const data = await response.json();
