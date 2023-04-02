@@ -1,78 +1,101 @@
 const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
 
+/**
+ * Fetches the relevant information details of a movie and return only the most
+ * relevant information.
+ * @param {Number} movie_id Identifies the movie as an integer
+ * @returns {Object}
+ */
 async function fetchMovieDetails(movie_id) {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movie_id}?api_key=${API_KEY}&language=en-US`,
+			`https://api.themoviedb.org/3/movie/${movie_id}?api_key=${API_KEY}
+			&language=en-US`,
 			{ mode: "cors" }
 		);
-		const data = await response.json();
+		const {
+			original_title,
+			overview,
+			tagline,
+			popularity,
+			vote_average,
+			vote_count,
+			genres,
+			video,
+			runtime,
+			poster_path,
+			backdrop_path,
+			release_date,
+		} = await response.json();
 
-		const genres = data.genres.reduce((acc, val) => [...acc, val.name], []);
+		const genreNames = genres.map((genre) => genre.name);
 
-		const generalInfo = {
-			mName: data.original_title,
-			summary: data.overview,
-			tagline: data.tagline,
-			popularity: data.popularity,
-			vote_average: data.vote_average,
-			vote_count: data.vote_count,
-			genres: genres,
-			video: data.video,
-			runtime: data.runtime,
-			poster_path: data.poster_path,
-			backdrop_path: data.backdrop_path,
-			release_date: data.release_date,
+		return {
+			mName: original_title,
+			summary: overview,
+			tagline,
+			popularity,
+			vote_average,
+			vote_count,
+			genres: genreNames,
+			video,
+			runtime,
+			poster_path,
+			backdrop_path,
+			release_date,
 		};
-		return generalInfo;
-	} catch (err) {
-		console.log(err);
+	} catch (error) {
+		// Squashed
+		console.error(`Failed to fetch movie details ${error.message}`);
 	}
 }
 
-/*
-Returns an array of recommended movies with their name, id, poster_path and
-backdrop_path recorded. 
-If no movies are recommended, return null;
-*/
+/**
+ * Reurns movie recommendations as an object with its relevant information. 
+ * Maximum 5 movies can be recommended and the .
+ * @param {Number} movie_id Identifies the movie as an Integer.
+ * @returns {Object}		An object that has the relevant information with
+ * 							it's images, title, id and relevant vote info.
+ */
 async function fetchMovieReccos(movie_id) {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${API_KEY}&language=en-US&page=1`,
+			`https://api.themoviedb.org/3/movie/${movie_id}/recommendations
+			?api_key=${API_KEY}&language=en-US&page=1`,
 			{ mode: "cors" }
 		);
+
+		if (!response.ok) {
+			throw new Error("Failed to fetch movie recommendations from API.");
+		}
+
 		const data = await response.json();
 
-		const recMovies = {};
-		if (data.results) {
-			let count = 1;
-			for (let movie of data.results) {
-				recMovies[movie.original_title] = {
-					mName: movie.original_title,
-					id: movie.id,
-					poster_path: movie.poster_path,
-					backdrop_path: movie.backdrop_path,
-					release_date: movie.release_date,
-					vote_count: movie.vote_count,
-					vote_average: movie.vote_average,
-				};
-				if (count === 5) {
-					// Max 5 movies to be recommended
-					break;
-				}
-				count++;
-			}
-		}
-		return recMovies;
-	} catch (err) {
-		console.log(err);
+		// Only retrieve the info on the first 5 movie recommendations.
+		const reccos = data.results.slice(0, 5).map((movie) => ({
+			mName: movie.original_title,
+			id: movie.id,
+			poster_path: movie.poster_path,
+			backdrop_path: movie.backdrop_path,
+			release_date: movie.release_date,
+			vote_count: movie.vote_count,
+			vote_average: movie.vote_average,
+		}));
+
+		return reccos;
+	} catch (error) {
+		console.error(
+			`Failed to fetch movie recommendations: ${error.message}`
+		);
 	}
 }
 
-/*
-Returns an object with countries and the available streaming services, buy
-or rent it comes with EACH individual country.
-*/
+/**
+ * Returns the relevant information (streaming, purchase and/or rent) of the
+ * movie providers.
+ * @param {Number} movie_id Identifies the movie as an Integer
+ * @returns {Object}
+ */
 async function fetchMovieProviders(movie_id) {
 	const providersByCountry = {};
 	try {
@@ -128,33 +151,37 @@ async function fetchMovieProviders(movie_id) {
 			);
 		}
 		return providersByCountry;
-	} catch (err) {
-		console.log(err);
+	} catch (error) {
+		console.erroror(`Failed to fetch movie providers: ${error.message}`);
 	}
 }
 
-// Find movie trailer and return false if none can be found.
-// Official trailer will be prioritised.
+/**
+ * Returns the relevant information of the movie trailer. The id should also
+ * be retrieved so that the user can search for the movie respectively.
+ * @param {Number} movie_id Identifies the movie as an Integer.
+ * @returns {Object}		Relevant info of trailer including video name, site
+ * 							language and type.
+ */
 async function fetchMovieTrailer(movie_id) {
 	try {
-		let movieTrailer;
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=${API_KEY}`,
-			{ mode: "cors" }
+			`https://api.themoviedb.org/3/movie/${movie_id}/videos?api_key=${API_KEY}&mode=cors`
 		);
+		if (!response.ok) {
+			throw new Error("Failed to fetch movie trailers from API.");
+		}
 		const data = await response.json();
 
-		const trailers = data.results.filter((video) => video.type === "Trailer");
+		// Find all trailers
+		const trailers = data.results.filter(
+			(video) => video.type === "Trailer"
+		);
+		if (trailers.length === 0) return;
 
-		if (trailers.length === 0) return false;
 		// Find official trailer.
-		const official = trailers.filter((video) => {
-			video.official === true;
-		});
-
-		official.length !== 0
-			? (movieTrailer = official[0])
-			: (movieTrailer = trailers[0]);
+		const official = trailers.find((video) => video.official === true);
+		const movieTrailer = official ?? trailers[0];
 
 		return {
 			tName: movieTrailer.name,
@@ -164,12 +191,16 @@ async function fetchMovieTrailer(movie_id) {
 			lang: getLanguage(movieTrailer.iso_639_1),
 		};
 	} catch (err) {
-		console.log(err);
+		console.error(`Failed to fetch movie trailers: ${err.message}`);
 	}
 }
 
-// Returns an arr of a maximum of 5 reviews based on the movie from random sources.
-// If no reviews are found, this fnc returns false.
+/**
+ * Returns the first 5 reviews with their ratings, author information and links.
+ * @param {Number} movie_id Identifies the movie as an Integer
+ * @returns {Object}		Review information including the content, author,
+ * 							links and ratings.
+ */
 async function fetchMovieReviews(movie_id) {
 	try {
 		let reviews = [];
@@ -191,8 +222,8 @@ async function fetchMovieReviews(movie_id) {
 			});
 		});
 		return reviews.slice(0, 5); // First 5 reviews returned
-	} catch (err) {
-		console.log(err);
+	} catch (error) {
+		console.error(`Fail to fetch movie reviews: ${error.message}`);
 	}
 }
 

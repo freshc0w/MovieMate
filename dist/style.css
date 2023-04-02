@@ -24,7 +24,6 @@ body {
 	color: whitesmoke;
 }
 
-
 #title-page {
 	--width: 670px;
 	width: var(--width);
