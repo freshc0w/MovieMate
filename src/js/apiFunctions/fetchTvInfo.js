@@ -220,7 +220,6 @@ async function fetchTvReviews(tv_id) {
 		const data = await response.json();
 		if (data.results.length === 0) return false;
 
-		// Only return the first 5 reviews maximum.
 		const reviews = data.results
 			.map((review) => ({
 				author: review.author,
@@ -230,7 +229,7 @@ async function fetchTvReviews(tv_id) {
 				url: review.url,
 				last_updated: review.updated_at,
 			}))
-			.slice(0, 5);
+			.slice(0, 5); // Only return the first 5 reviews maximum.
 
 		return reviews;
 	} catch (error) {

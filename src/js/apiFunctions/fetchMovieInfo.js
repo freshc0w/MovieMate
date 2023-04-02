@@ -217,8 +217,8 @@ async function fetchMovieReviews(movie_id) {
 		data.results.forEach((review) => {
 			reviews.push({
 				author: review.author,
-				rating: review.author_details.rating,
-				pic_path: review.author_details.avatar_path,
+				rating: review.author_details?.rating,
+				pic_path: review.author_details?.avatar_path,
 				content: review.content,
 				url: review.url,
 				last_updated: review.updated_at,
