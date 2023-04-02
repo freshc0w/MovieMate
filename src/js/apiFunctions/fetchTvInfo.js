@@ -1,5 +1,4 @@
-const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
-
+import { API_KEY } from "./constant";
 /**
  * Returns the relevant information of a tv show based on its id.
  * @param {Number} tv_id Identifies tv show by an integer

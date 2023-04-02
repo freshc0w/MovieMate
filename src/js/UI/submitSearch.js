@@ -13,13 +13,13 @@ export default async function addSubmitSearchFnc() {
 		}
 
 		// Remove title pages elems if any.
-		document.getElementById("title-page")
-			? document.getElementById("title-page").remove()
-			: "";
-		
-		document.querySelector(".intro-container2")
-			? document.querySelector(".intro-container2").remove()
-			: "";
+		if(document.getElementById("title-page")) {
+			document.getElementById("title-page").remove();
+		}
+
+		if(document.querySelector(".intro-container2")) {
+			document.querySelector(".intro-container2").remove();
+		}
 
 		clearSections();
 		await drawSections(query);

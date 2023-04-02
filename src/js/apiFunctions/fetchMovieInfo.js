@@ -1,5 +1,4 @@
-const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
-
+import { API_KEY } from "./constant";
 /**
  * Fetches the relevant information details of a movie and return only the most
  * relevant information.

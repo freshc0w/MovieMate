@@ -24,6 +24,8 @@ async function drawSections(title) {
 			}
 		});
 	});
+
+	
 	// draw all sections
 	sections.forEach(async (section) => {
 		await renderSection(section[0], section[1]).then(() => hideLoader());
@@ -72,7 +74,6 @@ async function drawSections(title) {
 
 function clearSections() {
 	const main = document.querySelector(".main-container");
-	const loader = document.querySelector(".loader");
 	const sections = main.getElementsByTagName('section');
 	[...sections].forEach(sect => sect.remove());
 }
@@ -85,7 +86,6 @@ function hideLoader() {
 	const loader = document.querySelector(".loader");
 
 	loader.style.visibility = "hidden";
-
 }
 
 export { drawSections, clearSections };

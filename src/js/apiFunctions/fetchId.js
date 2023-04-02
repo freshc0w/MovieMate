@@ -1,4 +1,4 @@
-const API_KEY = "720d2150cf09bfa61e28a5042cd7468f";
+import { API_KEY } from "./constant";
 /**
  * Fetches the first page of the movie/show ids and returns it as an object with
  * the movie/tv show id and it's media type as key-value pairs.
